@@ -2,6 +2,8 @@ call plug#begin()
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'joshdick/onedark.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree'
 call plug#end()
 set nocompatible
 filetype plugin indent on

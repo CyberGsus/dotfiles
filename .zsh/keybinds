@@ -1,4 +1,4 @@
-
+#!/bin/zsh
 
 [[ "$TERM" =~ '^screen' ]] && {
   bindkey '\e[1~' beginning-of-line # Home key

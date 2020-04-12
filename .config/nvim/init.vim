@@ -59,6 +59,9 @@ au FileType make set noexpandtab
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby
 au BufNewFile,BufRead *.{json,es6} set ft=javascript
 
+" Set all my custom shell filetypes
+au BufNewFile,BufRead *.{bashrc,bash_profile,zshrc,aliasrc,keybindsrc,sh} set ft=sh
+
 set ff=unix
 let NERDTreeIgnore=['\.rbc$', '\~$']
 let NERDTreeHijackNetrw=1

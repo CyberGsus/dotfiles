@@ -34,7 +34,7 @@ set list
 set listchars=""
 set list listchars=tab:»·,trail:·
 set scrolloff=5
-set backspace=indent,eol.start
+set backspace=indent,eol,start
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,*.git,*.rbc,*.scs?c
 

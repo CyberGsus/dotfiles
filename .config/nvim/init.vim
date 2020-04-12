@@ -19,8 +19,8 @@ set cursorline " Highlight current cursor line
 set showmode
 set hidden
 set wildmenu
-
-
+set number relativenumber
+set nowrap
 " Set color scheme
 colorscheme onedark
 
@@ -53,7 +53,7 @@ nmap K <Nop>
 
 map S :%s//g<Left><Left>
 
-au FileType python set ts=4 set softtabstop=4 set shiftwidth=4
+au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79
 au FileType make set noexpandtab
 
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby

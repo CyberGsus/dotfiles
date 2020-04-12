@@ -1,0 +1,7 @@
+
+
+[[ "$TERM" =~ '^screen' ]] && {
+  bindkey '\e[1~' beginning-of-line # Home key
+  bindkey '\e[4~' beginning-of-line # End key
+  bindkey '\e[3~' delete-char       # Supr key
+}

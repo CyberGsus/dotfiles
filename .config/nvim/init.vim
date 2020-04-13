@@ -62,6 +62,9 @@ au BufNewFile,BufRead *.{json,es6} set ft=javascript
 " Set all my custom shell filetypes
 au BufNewFile,BufRead *.{bashrc,bash_profile,zshrc,aliasrc,keybindsrc,sh} set ft=sh
 
+" Set dockerfile filetypes
+au BufNewFile,BufRead Dockerfile* set ft=dockerfile
+
 set ff=unix
 let NERDTreeIgnore=['\.rbc$', '\~$']
 let NERDTreeHijackNetrw=1

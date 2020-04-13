@@ -53,7 +53,7 @@ nmap K <Nop>
 
 map S :%s//g<Left><Left>
 
-au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79
+au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 nowrap
 au FileType make set noexpandtab
 
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby

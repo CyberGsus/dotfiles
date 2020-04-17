@@ -1,12 +1,31 @@
 call plug#begin()
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'joshdick/onedark.vim'
-Plug 'preservim/nerdcommenter'
+Plug 'hzchirs/vim-material'
 Plug 'preservim/nerdtree'
+" Essential!!
+" From christoomey <https://www.youtube.com/watch?v=wlR5gYd6um0&t=1545s>
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'christoomey/vim-titlecase'
+Plug 'christoomey/vim-sort-motion'
+Plug 'christoomey/vim-system-copy'
 call plug#end()
+
+
+if has('nvim')
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+
+if has('termguicolors')
+  set termguicolors
+endif
+
 set nocompatible
 filetype plugin indent on
+
 set laststatus=2
 set autoread
 set noswapfile
@@ -20,9 +39,12 @@ set showmode
 set hidden
 set wildmenu
 set number relativenumber
-set nowrap
+set wrap
 " Set color scheme
-colorscheme onedark
+let g:material_style='oceanic'
+let g:airline_theme='material'
+set background=dark
+colorscheme vim-material
 
 " Credit : Andrea Pavoni        <https://github.com/andreapavoni/dotfiles>
 set ruler
@@ -53,7 +75,7 @@ nmap K <Nop>
 
 map S :%s//g<Left><Left>
 
-au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 nowrap
+au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 
 au FileType make set noexpandtab
 
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby
@@ -65,18 +87,25 @@ au BufNewFile,BufRead *.{bashrc,bash_profile,zshrc,aliasrc,keybindsrc,sh} set ft
 " Set dockerfile filetypes
 au BufNewFile,BufRead Dockerfile* set ft=dockerfile
 
+if exists('+colorcolumn')
+  set colorcolumn=80
+  highlight ColorColumn ctermbg=lightgrey
+endif
+
 set ff=unix
 let NERDTreeIgnore=['\.rbc$', '\~$']
 let NERDTreeHijackNetrw=1
+let g:NERDTreeShowHidden=1
 let g:NERDTreeChDirMode = 2
-let g:NERDTreeWinPos = "right"
+let g:NERDTreeWinPos = "left"
 
 let g:airline_symbols = {}
 let g:airline_symbols.branch = '⎇  '
 let g:airline_symbols.linenr = '␤ '
 let g:airline_symbols.paste = 'ρ'
 
-nmap <C-Up> ddkp
+nmap <C-Z> NERDTreeToggle
+nmap <C-Up> ddkP
 nmap <C-Down> ddp
 
 vmap <C-Up> xkp`[V`]
@@ -89,3 +118,6 @@ nmap  <tab> ==
 
 noremap <S-left> :bprev<CR>
 noremap <S-right> :bnext<CR>
+if exists('g:vscode')
+  unmap <C-K>
+endif

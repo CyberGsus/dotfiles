@@ -5,22 +5,19 @@
 # https://www.youtube.com/channel/UCzTi9I3zApECTkukkMOpEEA/featured
 
 # Qtile Conf
-from libqtile.config import Key, Group, Drag, Click
-from libqtile.command import lazy
 from libqtile import layout
+from libqtile.command import lazy
+from libqtile.config import Key, Group, Drag, Click
 
 # Custom Conf
-from custom.bindings import mod_key, init_keys
-from custom.theme import colors
-from custom.screens import init_screens
+from custom.startup import keys, current_special
 from custom.groups import init_groups
-from custom.widgets import defaults
-
-
+from custom.screens import init_screens
+from custom.theme import colors
+from custom.widgets import defaults # Add-ons
+from custom.bindings import mod
 # Basic Config
 
-mod = mod_key
-keys = init_keys()
 widget_defaults = defaults
 extension_defaults = widget_defaults.copy()
 
@@ -43,12 +40,12 @@ layouts = [
         **layout_config
     ),
     layout.Bsp(
-
         **layout_config
     ),
     layout.MonadWide(
         **layout_config
-    )
+    ),
+    layout.Floating( **layout_config )
 ]
 
 # Screens
@@ -96,6 +93,8 @@ floating_layout = layout.Floating(
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
+
+
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the

@@ -2,7 +2,26 @@ from libqtile import widget
 from libqtile.config import Click
 from libqtile.command import lazy
 from custom.theme import colors, img
+from custom.bindings import get_keyboard
 
+
+def keyboard(kbd,color):
+    kbd.foreground = colors['light']
+    kbd.background = colors[color]
+    return kbd
+
+def battery(color):
+    return widget.Battery(
+            background = colors[color],
+            foreground = colors['light'],
+            charge_char = '\U0001F50C',
+            discharge_char = '\u26a1 ',
+            empty_char = '\u2620',
+            full_char = '\U0001f50b',
+            show_short_text = False,
+            format = '{char} {percent:2.2%} {watt:.2f} W',
+            update_interval = 1.5
+        )
 
 def sep(p):
     return widget.Sep(
@@ -41,7 +60,8 @@ def window_name():
         fontsize=11,
         foreground=colors["primary"],
         background=colors["dark"],
-        padding=5
+        padding=5,
+        show_state = True,
     )
 
 
@@ -74,7 +94,7 @@ def text_box(s, bgcolor):
 def pacman(bgcolor):
     return widget.Pacman(
         execute="alacritty -e bash -c 'checkupdates | less && trizen -Syu'",
-        update_interval=1800,
+        update_interval=10,
         foreground=colors["light"],
         background=colors[bgcolor]
     )
@@ -125,6 +145,11 @@ def init_laptop_widgets():
         text_box(" ⟳", "secondary"),
         pacman("secondary"),
         image("primary"),
+        text_box(' \u2328', 'primary'),
+        keyboard(get_keyboard(), "primary"),
+        image('secondary'),
+        battery("secondary"),
+        image("primary"),
         text_box(" ↯", "primary"),
         net("primary"),
         image("secondary"),
@@ -147,7 +172,6 @@ def init_laptop_widgets():
             fontsize=0,
             padding=0,
             margin=0,
-            fmt=None,
             wallpaper='/home/cyber/.local/share/wallpapers/cyberpunk-1.jpg'
         )
     ]

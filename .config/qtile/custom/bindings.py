@@ -1,72 +1,79 @@
+from libqtile import widget
 from libqtile.config import Key
 from libqtile.command import lazy
+from custom.functions import next_keyboard_layout
+mod = "mod4"
+alt = 'mod1'
 
-mod_key = "mod4"
+# Keyboard Layout
+keyboard = widget.KeyboardLayout(
+        configured_keyboards = ['us', 'es'],
+        update_interval = 0.3
+    )
 
+keys = [
 
-def init_keys():
-    return [
         # ------------ WINDOW CONFIGS ------------
 
         # Switch between windows in current stack pane
-        Key([mod_key], "j", lazy.layout.down()),
-        Key([mod_key], "k", lazy.layout.up()),
-        Key([mod_key], "h", lazy.layout.left()),
-        Key([mod_key], "l", lazy.layout.right()),
+        Key([mod], "j", lazy.layout.down()),
+        Key([mod], "k", lazy.layout.up()),
+        Key([mod], "h", lazy.layout.left()),
+        Key([mod], "l", lazy.layout.right()),
 
         # Change window sizes (MonadTall)
-        Key([mod_key, "shift"], "l", lazy.layout.grow()),
-        Key([mod_key, "shift"], "h", lazy.layout.shrink()),
+        Key([mod, "shift"], "l", lazy.layout.grow()),
+        Key([mod, "shift"], "h", lazy.layout.shrink()),
 
         # Toggle floating
-        Key([mod_key, "shift"], "f", lazy.window.toggle_floating()),
+        Key([mod, "shift"], "f", lazy.window.toggle_floating()),
 
         # Move windows up or down in current stack
-        Key([mod_key, "shift"], "j", lazy.layout.shuffle_down()),
-        Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
+        Key([mod, "shift"], "j", lazy.layout.shuffle_down()),
+        Key([mod, "shift"], "k", lazy.layout.shuffle_up()),
 
         # Toggle between different layouts as defined below
-        Key([mod_key], "Tab", lazy.next_layout()),
+        Key([mod], "Tab", lazy.next_layout()),
 
         # Kill window
-        Key([mod_key], "w", lazy.window.kill()),
+        Key([mod], "w", lazy.window.kill()),
 
         # Restart Qtile
-        Key([mod_key, "control"], "r", lazy.restart()),
+        Key([mod, "control"], "r", lazy.restart()),
 
-        Key([mod_key, "control"], "q", lazy.shutdown()),
-        Key([mod_key], "r", lazy.spawncmd()),
+        Key([mod, "control"], "q", lazy.shutdown()),
+        Key([mod], "r", lazy.spawncmd()),
 
         # Switch window focus to other pane(s) of stack
-        Key([mod_key], "space", lazy.layout.next()),
+        Key([mod], "space", lazy.layout.next()),
 
         # Swap panes of split stack
-        Key([mod_key, "shift"], "space", lazy.layout.rotate()),
+        Key([mod, "shift"], "space", lazy.layout.rotate()),
 
         # ------------ APPS CONFIG ------------
 
         # Menu
-        # Key([mod_key], "m", lazy.spawn("rofi -show run")),
+        # Key([mod], "m", lazy.spawn("rofi -show run")),
 
         # Window Nav
-        # Key([mod_key, "shift"], "m", lazy.spawn("dmenu_run -p 'Run: '")),
-        Key([mod_key, "shift"], 'm', lazy.spawn("dmenu_run -p 'Run :'")),
+        # Key([mod, "shift"], "m", lazy.spawn("dmenu_run -p 'Run: '")),
+        Key([mod, "shift"], 'm', lazy.spawn("dmenu_run -p 'Run :'")),
 
         # Browser
-        Key([mod_key], "b", lazy.spawn("qutebrowser")),
+        Key([mod], "b", lazy.spawn("qutebrowser")),
 
         # Discord
-        Key([mod_key], 'd', lazy.spawn('discord')),
+        Key([mod], 'd', lazy.spawn('discord')),
 
         # File Manager
-        Key([mod_key], "f", lazy.spawn("nautilus")),
+        Key([mod], "f", lazy.spawn("nautilus")),
 
         # Terminal
-        Key([mod_key], "Return", lazy.spawn("alacritty")),
+        Key([mod], "Return", lazy.spawn("alacritty")),
 
         # Redshift
-        Key([mod_key], "r", lazy.spawn("redshift -O 2400")),
-        Key([mod_key, "shift"], "r", lazy.spawn("redshift -x")),
+        Key([mod], "r", lazy.spawn("redshift -O 2400")),
+        Key([mod, "shift"], "r", lazy.spawn("redshift -x")),
 
         # ------------ HARDWARE CONFIG ------------
 
@@ -80,8 +87,31 @@ def init_keys():
         Key([], "XF86AudioMute", lazy.spawn(
             "pactl set-sink-mute @DEFAULT_SINK@ toggle"
         )),
-
+        Key([mod], 'space', next_keyboard_layout(keyboard))
         # Brightness
-        Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +10%")),
-        Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-")),
+        # Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +10%")),
+        # Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-")),
     ]
+
+# Special keybindings for different layouts
+special_keys = dict(
+    bsp=[
+        Key([mod, alt], 'j', lazy.layout.flip_down()),
+        Key([mod, alt], 'k', lazy.layout.flip_up()),
+        Key([mod, alt], 'h', lazy.layout.flip_left()),
+        Key([mod, alt], 'l', lazy.layout.flip_right()),
+        Key([mod, 'control'], 'j', lazy.layout.grow_down()),
+        Key([mod, 'control'], 'k', lazy.layout.grow_up()),
+        Key([mod, 'control'], 'h', lazy.layout.grow_left()),
+        Key([mod, 'control'], 'l', lazy.layout.grow_right()),
+        Key([mod, 'shift'], 'n', lazy.layout.normalize()),
+        Key([mod, 'shift'], 'Return', lazy.layout.toggle_split()),
+    ],
+)
+
+
+def get_keyboard():
+    kbd = globals().get('keyboard', None)
+    if kbd is None:
+        raise ValueError('Keyboard not initialized')
+    return kbd

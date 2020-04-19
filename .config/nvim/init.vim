@@ -1,3 +1,10 @@
+" Install vim-plug
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs 
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
+  q!
+endif
 call plug#begin()
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -5,13 +12,15 @@ Plug 'hzchirs/vim-material'
 Plug 'preservim/nerdtree'
 " Essential!!
 " From christoomey <https://www.youtube.com/watch?v=wlR5gYd6um0&t=1545s>
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
+
+Plug 'tpope/vim-repeat'                 " Enables repeating plug commands
+Plug 'tpope/vim-surround'               " Change surrounding stuff (quotes, bquotes)
+Plug 'tpope/vim-commentary'             " Commenting lines
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'christoomey/vim-titlecase'
-Plug 'christoomey/vim-sort-motion'
-Plug 'christoomey/vim-system-copy'
+Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
+Plug 'christoomey/vim-sort-motion'      " Sorting faster
+Plug 'christoomey/vim-system-copy'      " Copying to system buffer
+" Plug 'kana/vim-textobj-indent'          " Better indenting
 call plug#end()
 
 

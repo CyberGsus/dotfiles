@@ -3,6 +3,7 @@ from libqtile.config import Click
 from libqtile.command import lazy
 from custom.theme import colors, img
 from custom.bindings import get_keyboard
+import os.path
 
 
 def keyboard(kbd,color):
@@ -172,7 +173,7 @@ def init_laptop_widgets():
             fontsize=0,
             padding=0,
             margin=0,
-            wallpaper='/home/cyber/.local/share/wallpapers/cyberpunk-1.jpg'
+            wallpaper=os.path.realpath('./.config/qtile/custom/wallpapers/cyberpunk-1.jpg')
         )
     ]
 

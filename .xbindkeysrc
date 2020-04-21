@@ -9,18 +9,18 @@
 "xbacklight +5"
     m:0x0 + c:233
 # Toggle volume
-"/usr/bin/pulseaudio-ctl mute"
-    m:0x0 + c:121
+#"/usr/bin/pulseaudio-ctl mute"
+    #m:0x0 + c:121
 
 # Toggle mic
-"/usr/bin/pulseaudio-ctl mute-input"
-    m:0x0 + c:198
+#"/usr/bin/pulseaudio-ctl mute-input"
+    #m:0x0 + c:198
 # Volume up
-"/usr/bin/pulseaudio-ctl up 5"
-    m:0x0 + c:123
+#"/usr/bin/pulseaudio-ctl up 5"
+    #m:0x0 + c:123
 # Volume down
-"/usr/bin/pulseaudio-ctl down 5"
-    m:0x0 + c:122
+#"/usr/bin/pulseaudio-ctl down 5"
+    #m:0x0 + c:122
 # Screenshot Full Screen (Mod4 + Print)
 "import -window root /home/cyber/Pictures/screenshot-`date +%m%d%Y%H%M%S`.png"
    m:0x40 + c:107
@@ -29,6 +29,19 @@
 "import -frame /home/cyber/Pictures/screenshot-`date +%m%d%Y%H%M%S`.png"
     m:0x0 + c:107
 
+# Load/unload xcompmgr (Mod4 + Delete)
+"~/.scripts/xcompmgr.sh"
+    m:0x40 + c:119
+
+# Next keyboard layout (Alt+Mod4 + Super_L) or alt+super+space
+"touch ~/.scripts/next"
+  m:0x48 + c:65
+  #Alt+Mod4 + Super_L
+
+
+# Last keyboard layout (Ctrl+Alt+Mod4 + Super_L) or control+alt+super+space
+"touch ~/.scripts/last"
+  m:0x4c + c:65
 
 ############################
 #    End of xbindkeysrc    #

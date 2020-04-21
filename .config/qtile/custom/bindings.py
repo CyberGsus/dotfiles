@@ -66,7 +66,7 @@ keys = [
         Key([mod], 'd', lazy.spawn('discord')),
 
         # File Manager
-        Key([mod], "f", lazy.spawn("nautilus")),
+        Key([mod], "f", lazy.spawn("dolphin")),
 
         # Terminal
         Key([mod], "Return", lazy.spawn("alacritty")),

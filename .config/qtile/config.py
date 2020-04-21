@@ -40,6 +40,7 @@ layouts = [
         **layout_config
     ),
     layout.Bsp(
+        fair = False,
         **layout_config
     ),
     layout.MonadWide(

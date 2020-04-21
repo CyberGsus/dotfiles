@@ -1,1 +1,4 @@
 # dotfiles
+
+![screenshot](./screenshot.png)
+

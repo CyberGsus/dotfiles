@@ -1,3 +1,4 @@
+
 " Install vim-plug
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs 
@@ -5,11 +6,15 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
   q!
 endif
+
+
+
 call plug#begin()
+" Theme
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'hzchirs/vim-material'
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree'               " File Tree
 " Essential!!
 " From christoomey <https://www.youtube.com/watch?v=wlR5gYd6um0&t=1545s>
 
@@ -21,9 +26,12 @@ Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
 Plug 'christoomey/vim-sort-motion'      " Sorting faster
 Plug 'christoomey/vim-system-copy'      " Copying to system buffer
 " Plug 'kana/vim-textobj-indent'          " Better indenting
+
+" Plug 'neoclide/coc.nvim', { 'branch' : 'release' }   " Autocompletion
 call plug#end()
 
 
+nmap <C-n> :NERDTreeToggle<CR>
 if has('nvim')
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
@@ -42,7 +50,7 @@ set nowritebackup
 set nobackup
 let mapleader=","  " <Leader> -> ,
 set visualbell
-set mouse=a
+" set mouse=a
 set cursorline " Highlight current cursor line
 set showmode
 set hidden
@@ -101,12 +109,12 @@ if exists('+colorcolumn')
   highlight ColorColumn ctermbg=lightgrey
 endif
 
-set ff=unix
-let NERDTreeIgnore=['\.rbc$', '\~$']
-let NERDTreeHijackNetrw=1
-let g:NERDTreeShowHidden=1
-let g:NERDTreeChDirMode = 2
-let g:NERDTreeWinPos = "left"
+" set ff=unix
+" let NERDTreeIgnore=['\.rbc$', '\~$']
+" let NERDTreeHijackNetrw=1
+" let g:NERDTreeShowHidden=1
+" let g:NERDTreeChDirMode = 2
+" let g:NERDTreeWinPos = "left"
 
 let g:airline_symbols = {}
 let g:airline_symbols.branch = '⎇  '
@@ -130,3 +138,32 @@ noremap <S-right> :bnext<CR>
 if exists('g:vscode')
   unmap <C-K>
 endif
+
+" Important!
+set path+=**
+
+
+
+" File browsing (default vim plugin)
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_list_hide=netrw_gitignore#Hide()
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+" Snippets
+
+nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
+
+" set makeprg=bundle\ exec\ rspec\ -f\ QuickfixFormatter
+
+" Include brackets
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap [ []<left>
+inoremap ( ()<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+

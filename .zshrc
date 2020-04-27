@@ -4,7 +4,7 @@
 #   Chis Titus          <https://github.com/ChrisTitusTech/zsh>
 
 setopt autocd
-#setopt vi # vi mode is slow for me in default zsh
+setopt vi 
 
 
 # Fallback left prompt

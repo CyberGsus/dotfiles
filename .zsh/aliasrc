@@ -77,3 +77,7 @@ alias unexport='unset'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
+alias ip='ip -c'
+
+# GCC used options
+alias gcc='gcc -Wall -Wextra -Werror'

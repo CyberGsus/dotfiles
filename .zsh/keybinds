@@ -1,7 +1,22 @@
 #!/bin/zsh
 
+
+function vi_mode_prompt_info() {
+  echo -e "${${KEYMAP/vicmd/[% NORMAL]%}/(main|viins)/[% INSERT]%}"
+}
+
 [[ "$TERM" =~ '^screen' ]] && {
   bindkey '\e[1~' beginning-of-line # Home key
   bindkey '\e[4~' end-of-line # End key
   bindkey '\e[3~' delete-char       # Supr key
 }
+
+
+# Better searching in command mode
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+bindkey -M vicmd '^V' edit-command-line
+
+# Make Vi mode transitions faster (KEYTIMEOUT is in hundredths of a second)
+export KEYTIMEOUT=1
+

@@ -54,7 +54,6 @@ def group_box():
         background=colors["dark"]
     )
 
-
 def window_name():
     return widget.WindowName(
         font="JetBrains Bold",
@@ -94,7 +93,7 @@ def text_box(s, bgcolor):
 
 def pacman(bgcolor):
     return widget.Pacman(
-        execute="alacritty -e bash -c 'checkupdates | less && trizen -Syu'",
+        execute="alacritty -e bash -c 'sudo ~/.scripts/upgrading.sh'",
         update_interval=10,
         foreground=colors["light"],
         background=colors[bgcolor]
@@ -129,7 +128,7 @@ def clock(bgcolor):
     return widget.Clock(
         foreground=colors["light"],
         background=colors[bgcolor],
-        format="%d / %m / %Y - %H:%M "
+        format="%a, %d of %B %Y | %T"
     )
 
 

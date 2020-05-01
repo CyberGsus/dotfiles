@@ -22,7 +22,7 @@ fi
 mount "$disk" "$where" 2>/dev/null || exit 1
 
 ans=`echo -e "No\nYes" | dmenu -p "Add to fstab?"`
-[ -z "$ans"] || [[ "$ans" =~ 'N' ]] && exit 0
+[ -z "$ans" ] || [[ "$ans" =~ 'N' ]] && exit 0
 UUID=`lsblk -lpo NAME,UUID | grep "$disk" | awk '{print $2}'`
 FSTYPE=`lsblk -lpo NAME,FSTYPE | grep "$disk" | awk '{print $2}'`
 echo "# UUID=$UUID NAME=$disk FSTYPE=$FSTYPE `date '+%D %h %H:%M:%S'`"

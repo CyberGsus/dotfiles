@@ -1,3 +1,4 @@
+light-locker &
 picom -f &
 blueman-applet &
 nm-applet &

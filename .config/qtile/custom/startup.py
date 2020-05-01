@@ -2,6 +2,7 @@ from libqtile.command import lazy
 from libqtile.hook import subscribe
 from libqtile.config import Key
 from custom.bindings import keys, special_keys, mod
+from custom.groups import groups
 
 current_special = None
 
@@ -20,3 +21,4 @@ def layout_change(layout, group):
         current_special = special_keys[layout.name]
         keys.extend(current_special)
     keys = list(set(keys)) # Remove duplicates
+

@@ -1,0 +1,75 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
+GroupDict	custom/extra.py	/^class GroupDict:$/;"	c
+RedShift	custom/extra.py	/^class RedShift:$/;"	c
+TmuxSessionManager	custom/extra.py	/^class TmuxSessionManager:$/;"	c
+__del__	custom/extra.py	/^    def __del__(self):$/;"	m	class:RedShift
+__getitem__	custom/extra.py	/^    def __getitem__(self, key):$/;"	m	class:GroupDict
+__init__	custom/extra.py	/^    def __init__(self, groups, configs):$/;"	m	class:GroupDict
+__init__	custom/extra.py	/^    def __init__(self, terminal_command, groups, **group_config):$/;"	m	class:TmuxSessionManager
+__init__	custom/extra.py	/^    def __init__(self, values):$/;"	m	class:RedShift
+__inner	custom/groups.py	/^    def __inner(qtile):$/;"	f	function:change_group	file:
+alt	custom/bindings.py	/^alt = 'mod1'$/;"	v
+auto_fullscreen	config.py	/^auto_fullscreen = True$/;"	v
+battery	custom/widgets.py	/^def battery(color):$/;"	f
+bring_front_click	config.py	/^bring_front_click = False$/;"	v
+change_group	custom/groups.py	/^def change_group(name):$/;"	f
+check_available	custom/extra.py	/^    def check_available():$/;"	m	class:RedShift
+clock	custom/widgets.py	/^def clock(bgcolor):$/;"	f
+colors	custom/theme.py	/^    colors = json.load(f)$/;"	v
+current_layout	custom/widgets.py	/^def current_layout(bgcolor):$/;"	f
+current_layout_icon	custom/widgets.py	/^def current_layout_icon(bgcolor):$/;"	f
+current_special	custom/startup.py	/^current_special = None$/;"	v
+cursor_warp	config.py	/^cursor_warp = False$/;"	v
+defaults	custom/extra.py	/^    defaults = {$/;"	v	class:TmuxSessionManager
+defaults	custom/widgets.py	/^defaults = dict($/;"	v
+dgroups_app_rules	config.py	/^dgroups_app_rules = []  # type: List$/;"	v
+dgroups_key_binder	config.py	/^dgroups_key_binder = None$/;"	v
+extension_defaults	config.py	/^extension_defaults = widget_defaults.copy()$/;"	v
+floating_layout	config.py	/^floating_layout = layout.Floating($/;"	v
+focus_on_window_activation	config.py	/^focus_on_window_activation = "smart"$/;"	v
+follow_mouse_focus	config.py	/^follow_mouse_focus = True$/;"	v
+get_keyboard	custom/bindings.py	/^def get_keyboard():$/;"	f
+group_box	custom/widgets.py	/^def group_box():$/;"	f
+groups	config.py	/^groups = init_groups(keys)$/;"	v
+groups	custom/groups.py	/^groups = init_groups(keys)$/;"	v
+image	custom/widgets.py	/^def image(image):$/;"	f
+img	custom/theme.py	/^img = {}$/;"	v
+img_path	custom/theme.py	/^img_path = path.join(theme_path, "img")$/;"	v
+init_groups	custom/groups.py	/^def init_groups(keys):$/;"	f
+init_laptop_widgets	custom/widgets.py	/^def init_laptop_widgets():$/;"	f
+init_monitor_widgets	custom/widgets.py	/^def init_monitor_widgets():$/;"	f
+init_screens	custom/screens.py	/^def init_screens():$/;"	f
+keyboard	custom/bindings.py	/^keyboard = widget.KeyboardLayout($/;"	v
+keyboard	custom/widgets.py	/^def keyboard(kbd,color):$/;"	f
+keys	custom/bindings.py	/^keys = [$/;"	v
+layout_change	custom/startup.py	/^def layout_change(layout, group):$/;"	f
+layout_config	config.py	/^layout_config = dict($/;"	v
+layouts	config.py	/^layouts = [$/;"	v
+main	config.py	/^main = None$/;"	v
+mod	custom/bindings.py	/^mod = "mod4"$/;"	v
+mouse	config.py	/^mouse = [$/;"	v
+net	custom/widgets.py	/^def net(bgcolor):$/;"	f
+next	custom/extra.py	/^    def next(self, qtile):$/;"	m	class:RedShift
+pacman	custom/widgets.py	/^def pacman(bgcolor):$/;"	f
+reset	custom/extra.py	/^    def reset(self, qtile):$/;"	m	class:RedShift
+screens	config.py	/^screens = init_screens()$/;"	v
+sep	custom/widgets.py	/^def sep(p):$/;"	f
+singleton	custom/extra.py	/^def singleton(cls):$/;"	f
+spawn_tmux	custom/extra.py	/^    def spawn_tmux(self, current_group):$/;"	m	class:TmuxSessionManager
+special_keys	custom/bindings.py	/^special_keys = dict($/;"	v
+start	custom/extra.py	/^    def start(*args, **kwargs):$/;"	f	function:singleton	file:
+systray	custom/widgets.py	/^def systray():$/;"	f
+text_box	custom/widgets.py	/^def text_box(s, bgcolor):$/;"	f
+theme	custom/theme.py	/^theme = "dracula"$/;"	v
+theme_path	custom/theme.py	/^theme_path = path.join($/;"	v
+tmux_manager	custom/functions.py	/^tmux_manager = TmuxSessionManager( 'alacritty -e', $/;"	v
+widget_defaults	config.py	/^widget_defaults = defaults$/;"	v
+window_name	custom/widgets.py	/^def window_name():$/;"	f
+wmname	config.py	/^wmname = "LG3D"$/;"	v

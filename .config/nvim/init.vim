@@ -1,12 +1,12 @@
-
+set path+=**
+au!
 " Install vim-plug
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs 
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
   q!
 endif
-
 
 
 call plug#begin()
@@ -21,17 +21,22 @@ Plug 'preservim/nerdtree'               " File Tree
 Plug 'tpope/vim-repeat'                 " Enables repeating plug commands
 Plug 'tpope/vim-surround'               " Change surrounding stuff (quotes, bquotes)
 Plug 'tpope/vim-commentary'             " Commenting lines
+Plug 'tpope/vim-fugitive'
+Plug 'vim-syntastic/syntastic'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
 Plug 'christoomey/vim-sort-motion'      " Sorting faster
 Plug 'christoomey/vim-system-copy'      " Copying to system buffer
 " Plug 'kana/vim-textobj-indent'          " Better indenting
 
+" Linting
+Plug 'dense-analysis/ale'
+
 " Plug 'neoclide/coc.nvim', { 'branch' : 'release' }   " Autocompletion
 call plug#end()
 
 
-nmap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-m> :NERDTreeToggle<CR>
 if has('nvim')
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
@@ -41,9 +46,10 @@ if has('termguicolors')
 endif
 
 set nocompatible
+
 filetype plugin indent on
 
-set laststatus=2
+set laststatus=2 
 set autoread
 set noswapfile
 set nowritebackup
@@ -82,13 +88,17 @@ set incsearch
 set ignorecase
 set smartcase
 
-noremap <Up> <Esc>
-noremap <Down> <Esc>
-noremap <Left> <Esc>
-noremap <Right> <Esc>
+" Break bad habits!
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
 
-
-nmap K <Nop>
+" nmap K <Nop>
 
 map S :%s//g<Left><Left>
 
@@ -97,6 +107,9 @@ au FileType make set noexpandtab
 
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby
 au BufNewFile,BufRead *.{json,es6} set ft=javascript
+
+" Set tmux files
+au BufRead,BufNewFile .tmux* set ft=tmux
 
 " Set all my custom shell filetypes
 au BufNewFile,BufRead *.{bashrc,bash_profile,zshrc,aliasrc,keybindsrc,sh} set ft=sh
@@ -125,8 +138,8 @@ nmap <C-Z> NERDTreeToggle
 nmap <C-Up> ddkP
 nmap <C-Down> ddp
 
-vmap <C-Up> xkp`[V`]
-vmap <C-Down> xp`[V`]
+" vmap <C-Up> xkp`[V`]
+" vmap <C-Down> xp`[V`]
 
 map   <silent> <F5> mmgg=G'm
 imap  <silent> <F5> <Esc> mmgg=G'm
@@ -135,15 +148,15 @@ nmap  <tab> ==
 
 noremap <S-left> :bprev<CR>
 noremap <S-right> :bnext<CR>
-if exists('g:vscode')
-  unmap <C-K>
-endif
+" Moving lines around
+nnoremap - ddp
+nnoremap _ ddkP
+" Remapping tab navigation
+" nnoremap hT :tabnext
+" nnoremap ht :tabn
 
-" Important!
-set path+=**
-
-
-
+inoremap <leader><c-u> <Esc>viwUi
+inoremap <leader><c-d> <Esc>ddi
 " File browsing (default vim plugin)
 let g:netrw_banner=0        " disable annoying banner
 let g:netrw_browse_split=4  " open in prior window
@@ -152,18 +165,45 @@ let g:netrw_liststyle=3     " tree view
 let g:netrw_list_hide=netrw_gitignore#Hide()
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
+
+" ALE
+let g:ale_fix_on_save=1
+let g:ale_fixers = {
+      \ 'javascript' : [
+      \ 'eslint',
+      \ {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+      \ ],
+      \ 'python' : [
+      \ 'autopep8',
+      \ 'trim_whitespace',
+      \ 'remove_trailing_lines',
+      \ ],
+      \}
+
+" Bind F8 to fixing problems with ALE
+nmap <F8> <Plug>(ale_fix)
 " Snippets
 
-nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
+nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>cit
 
 " set makeprg=bundle\ exec\ rspec\ -f\ QuickfixFormatter
 
 " Include brackets
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap [ []<left>
-inoremap ( ()<left>
+" inoremap " ""<left>
+" inoremap ' ''<left>
+" inoremap [ []<left>
+" inoremap ( ()<left>
 inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
+inoremap {; {};<left><left>
+inoremap {<CR> {<CR>}<ESC>O " inoremap {;<CR> {<CR>};<ESC>O 
+" Edit my vimrc and go back to coding
+nnoremap <leader>evv :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>evh :split $MYVIMRC<cr>
 
+" Disable normal escape and force myself to use jk
+inoremap <esc> <nop>
+inoremap jk <Esc>
+" Auto indent
+nnoremap <leader><tab> mmgg=G`m
+source $HOME/.config/nvim/languages.vim

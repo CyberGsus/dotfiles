@@ -1,9 +1,13 @@
 from libqtile import widget
 from libqtile.config import Key
 from libqtile.command import lazy
-from custom.functions import next_keyboard_layout
+from custom import functions
+from custom.extra import RedShift
 mod = "mod4"
 alt = 'mod1'
+
+
+# redshift = RedShift([ 2400, 20000 ])
 
 # Keyboard Layout
 keyboard = widget.KeyboardLayout(
@@ -66,14 +70,18 @@ keys = [
         Key([mod], 'd', lazy.spawn('discord')),
 
         # File Manager
-        Key([mod], "f", lazy.spawn("dolphin")),
+        Key([mod], "f", lazy.spawn("nautilus")),
 
         # Terminal
         Key([mod], "Return", lazy.spawn("alacritty")),
 
+
         # Redshift
-        Key([mod], "r", lazy.spawn("redshift -O 2400")),
-        Key([mod, "shift"], "r", lazy.spawn("redshift -x")),
+        # Key([mod], 'r', redshift.next),
+        # Key([mod, "shift"], "r", redshift.reset),
+        Key([mod], 'r', lazy.spawn('redshift -PO 2400')),
+        Key([mod, 'shift'], 'r', lazy.spawn('redshift -x')),
+
 
         # ------------ HARDWARE CONFIG ------------
 
@@ -87,7 +95,7 @@ keys = [
         Key([], "XF86AudioMute", lazy.spawn(
             "pactl set-sink-mute @DEFAULT_SINK@ toggle"
         )),
-        Key([mod], 'space', next_keyboard_layout(keyboard))
+        Key([mod], 'space', functions.next_keyboard_layout(keyboard))
         # Brightness
         # Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +10%")),
         # Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-")),

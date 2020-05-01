@@ -1,8 +1,9 @@
-from libqtile import widget
-from libqtile.config import Click
-from libqtile.command import lazy
-from custom.theme import colors, img
 from custom.bindings import get_keyboard
+from custom.coloring import apply_alpha_qtile
+from custom.theme import colors, img
+from libqtile import widget
+from libqtile.command import lazy
+from libqtile.config import Click
 import os.path
 
 
@@ -35,33 +36,33 @@ def sep(p):
 
 def group_box():
     return widget.GroupBox(
-        font="Hack Bold",
-        fontsize=10,
+        fontsize=11,
         margin_y=0,
         margin_x=0,
-        padding_y=8,
-        padding_x=5,
-        borderwidth=1,
+        padding_y=6,
+        padding_x=0,
+        borderwidth=3.5,
         active=colors["light"],
         inactive=colors["light"],
         rounded=False,
-        highlight_method="block",
+        highlight_method="line",
         this_current_screen_border=colors["primary"],
         this_screen_border=colors["grey"],
         other_current_screen_border=colors["dark"],
         other_screen_border=colors["dark"],
         foreground=colors["light"],
-        background=colors["dark"]
+        background=colors["dark"],
+        highlight_color = apply_alpha_qtile(colors["dark"], colors["light"], 0.15),
+        font=defaults['font_alt'],
     )
 
 def window_name():
     return widget.WindowName(
-        font="JetBrains Bold",
-        fontsize=11,
         foreground=colors["primary"],
         background=colors["dark"],
-        padding=5,
         show_state = True,
+        fontsize=defaults['fontsize'],
+        font=defaults['font_alt']
     )
 
 
@@ -82,18 +83,16 @@ def image(image):
 
 def text_box(s, bgcolor):
     return widget.TextBox(
-        font="JetBrains Bold",
         text=s,
-        padding=5,
         foreground=colors["light"],
         background=colors[bgcolor],
-        fontsize=15
+        **defaults
     )
 
 
 def pacman(bgcolor):
     return widget.Pacman(
-        execute="alacritty -e bash -c 'sudo ~/.scripts/upgrading.sh'",
+        execute="alacritty -e bash -c '~/.scripts/upgrading.sh'",
         update_interval=10,
         foreground=colors["light"],
         background=colors[bgcolor]
@@ -128,13 +127,13 @@ def clock(bgcolor):
     return widget.Clock(
         foreground=colors["light"],
         background=colors[bgcolor],
-        format="%a, %d of %B %Y | %T"
+        format="%a %B %d %Y [ %T ]"
     )
 
 
 def init_laptop_widgets():
     return [
-        sep(5),
+        sep(7),
         group_box(),
         sep(5),
         window_name(),
@@ -158,21 +157,15 @@ def init_laptop_widgets():
         image("primary"),
         text_box(" 🕒", "primary"),
         clock("primary"),
-        # image('secondary'),
-        # text_box(' \u2328', 'secondary'),
-        # widget.KeyboardLayout(
-            # background = colors['secondary'][0],
-            # foreground = colors['light'],
-            # font = 'JetBrains Mono',
-            # configured_keyboard = [ 'us', 'es' ]
-            # padding = 5
-        # ),
+        image('secondary'),
         widget.Wallpaper(
-            background=colors["dark"],
-            fontsize=0,
-            padding=0,
+            background=colors["secondary"],
+            foreground=colors['light'],
+            fontsize=11,
+            padding=3,
             margin=0,
-            wallpaper=os.path.realpath('./.config/qtile/custom/wallpapers/cyberpunk-1.jpg')
+            directory=os.path.expanduser('~/.config/qtile/custom/wallpapers/'),
+            label='Wallpaper'
         )
     ]
 
@@ -193,7 +186,8 @@ def init_monitor_widgets():
 
 
 defaults = dict(
-    font='JetBrains  Mono',
-    fontsize=13,
+    font='JetBrains Mono',
+    font_alt='IBMPlexMono, Bold Italic',
+    fontsize=12,
     padding=2,
 )

@@ -28,26 +28,20 @@ groups = init_groups(keys)
 # Layouts
 
 layout_config = dict(
-    border_focus=colors["primary"][0],
-    border_normal=colors["secondary"][0],
-    border_width=1,
-    margin=4
-)
+        border_focus=colors["primary"][0],
+        border_normal=colors["secondary"][0],
+        border_width=1,
+        margin=4
+        )
 
 layouts = [
-    layout.Max(),
-    layout.MonadTall(
-        **layout_config
-    ),
-    layout.Bsp(
-        fair = False,
-        **layout_config
-    ),
-    layout.MonadWide(
-        **layout_config
-    ),
-    layout.Floating( **layout_config )
-]
+        layout.Max(),
+        layout.Bsp(
+            fair = False,
+            **layout_config
+            ),
+        layout.Floating( **layout_config )
+        ]
 
 # Screens
 
@@ -56,16 +50,16 @@ screens = init_screens()
 # Drag floating layouts
 
 mouse = [
-    Drag(
-        [mod], "Button1", lazy.window.set_position_floating(),
-        start=lazy.window.get_position()
-    ),
-    Drag(
-        [mod], "Button3", lazy.window.set_size_floating(),
-        start=lazy.window.get_size()
-    ),
-    Click([mod], "Button2", lazy.window.bring_to_front())
-]
+        Drag(
+            [mod], "Button1", lazy.window.set_position_floating(),
+            start=lazy.window.get_position()
+            ),
+        Drag(
+            [mod], "Button3", lazy.window.set_size_floating(),
+            start=lazy.window.get_size()
+            ),
+        Click([mod], "Button2", lazy.window.bring_to_front())
+        ]
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
@@ -74,24 +68,24 @@ follow_mouse_focus = True
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(
-    float_rules=[
-        {'wmclass': 'confirm'},
-        {'wmclass': 'dialog'},
-        {'wmclass': 'download'},
-        {'wmclass': 'error'},
-        {'wmclass': 'file_progress'},
-        {'wmclass': 'notification'},
-        {'wmclass': 'splash'},
-        {'wmclass': 'toolbar'},
-        {'wmclass': 'confirmreset'},  # gitk
-        {'wmclass': 'makebranch'},  # gitk
-        {'wmclass': 'maketag'},  # gitk
-        {'wname': 'branchdialog'},  # gitk
-        {'wname': 'pinentry'},  # GPG key password entry
-        {'wmclass': 'ssh-askpass'},  # ssh-askpass
-    ],
-    border_focus=colors["secondary"][0]
-)
+        float_rules=[
+            {'wmclass': 'confirm'},
+            {'wmclass': 'dialog'},
+            {'wmclass': 'download'},
+            {'wmclass': 'error'},
+            {'wmclass': 'file_progress'},
+            {'wmclass': 'notification'},
+            {'wmclass': 'splash'},
+            {'wmclass': 'toolbar'},
+            {'wmclass': 'confirmreset'},  # gitk
+            {'wmclass': 'makebranch'},  # gitk
+            {'wmclass': 'maketag'},  # gitk
+            {'wname': 'branchdialog'},  # gitk
+            {'wname': 'pinentry'},  # GPG key password entry
+            {'wmclass': 'ssh-askpass'},  # ssh-askpass
+            ],
+        border_focus=colors["secondary"][0]
+        )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 

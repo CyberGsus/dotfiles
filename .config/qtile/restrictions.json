@@ -1,0 +1,12 @@
+{
+    "restrictions" : [
+        {
+            "alacritty" : {
+               "regex_options" : {
+                    "incomplete" : true,
+                    "case_insensitive" : true
+                },
+                "
+            }
+        }
+}

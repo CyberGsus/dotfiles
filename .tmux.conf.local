@@ -13,7 +13,6 @@
 # then uncomment the following line to make Meta + arrow keys mapping work
 #set -ga terminal-overrides "*:kUP3=\e[1;9A,*:kDN3=\e[1;9B,*:kRIT3=\e[1;9C,*:kLFT3=\e[1;9D"
 
-
 # -- windows & pane creation ---------------------------------------------------
 
 # new window retains current path, possible values are:
@@ -283,7 +282,7 @@ tmux_conf_copy_to_os_clipboard=true
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
 #set -g status-keys vi
-#set -g mode-keys vi
+set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
 # set -gu prefix2
@@ -297,5 +296,6 @@ unbind C-b
 set -g prefix C-x
 bind C-x send-prefix
 
+bind * setw -g synchronize-panes
 # move status line to top
 #set -g status-position top

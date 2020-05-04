@@ -6,6 +6,7 @@
 setopt autocd
 setopt vi 
 
+PATH+=':.local/bin'
 
 # Fallback left prompt
 autoload -U colors && colors

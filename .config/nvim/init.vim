@@ -1,7 +1,7 @@
 set path+=**
 au!
 " Install vim-plug
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+if empty (glob ('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs 
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
@@ -9,10 +9,11 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 
 
-call plug#begin()
+call plug#begin('~/.vim/plugged')
 " Theme
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'bling/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'hzchirs/vim-material'
 Plug 'preservim/nerdtree'               " File Tree
 " Essential!!
@@ -24,30 +25,31 @@ Plug 'tpope/vim-commentary'             " Commenting lines
 Plug 'tpope/vim-fugitive'
 Plug 'vim-syntastic/syntastic'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
+" Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
 Plug 'christoomey/vim-sort-motion'      " Sorting faster
 Plug 'christoomey/vim-system-copy'      " Copying to system buffer
 " Plug 'kana/vim-textobj-indent'          " Better indenting
 
 " Linting
 Plug 'dense-analysis/ale'
+" File Browser
+Plug 'vifm/vifm.vim'
 
 " Plug 'neoclide/coc.nvim', { 'branch' : 'release' }   " Autocompletion
 call plug#end()
 
+set nocompatible
+filetype plugin indent on
 
 nnoremap <C-m> :NERDTreeToggle<CR>
-if has('nvim')
+if has ('nvim')
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 
-if has('termguicolors')
+if has ('termguicolors')
   set termguicolors
 endif
 
-set nocompatible
-
-filetype plugin indent on
 
 set laststatus=2 
 set autoread
@@ -58,14 +60,42 @@ let mapleader=","  " <Leader> -> ,
 set visualbell
 " set mouse=a
 set cursorline " Highlight current cursor line
-set showmode
+set noshowmode
 set hidden
 set wildmenu
 set number relativenumber
 set wrap
+
 " Set color scheme
 let g:material_style='oceanic'
-let g:airline_theme='material'
+let g:lightline = {
+      \ 'colorscheme' : 'material',
+      \ 'active' : { 
+      \ 'left' : [ [ 'mode', 'paste', ],
+      \        [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+      \ ],
+      \ 'right' : [
+      \         [ 'lineinfo' ],
+      \         [ 'charvaluehex' ],
+      \         [ 'fileformat', 'fileencoding', 'filetype' ],
+      \ ],
+      \},
+      \ 'component' : { 
+      \   'filename' : '%F',
+      \   'modified' : '%m',
+      \   'charvaluehex' : '0x%b'
+      \ },
+      \ 'component_function' : {
+      \ 'gitbranch' : 'fugitive#head',
+      \ }
+      \ }
+let g:lightline.separator = {
+      \   'left': '', 'right': ''
+      \}
+let g:lightline.subseparator = {
+      \   'left': '', 'right': '' 
+      \}
+" let g:airline_theme='material'
 set background=dark
 colorscheme vim-material
 
@@ -117,7 +147,7 @@ au BufNewFile,BufRead *.{bashrc,bash_profile,zshrc,aliasrc,keybindsrc,sh} set ft
 " Set dockerfile filetypes
 au BufNewFile,BufRead Dockerfile* set ft=dockerfile
 
-if exists('+colorcolumn')
+if exists ('+colorcolumn')
   set colorcolumn=80
   highlight ColorColumn ctermbg=lightgrey
 endif
@@ -171,7 +201,7 @@ let g:ale_fix_on_save=1
 let g:ale_fixers = {
       \ 'javascript' : [
       \ 'eslint',
-      \ {buffer, lines -> filter(lines, 'v:val !=~ ''^\s*//''')},
+      \ {buffer, lines -> filter (lines, 'v:val !=~ ''^\s*//''')},
       \ ],
       \ 'python' : [
       \ 'autopep8',
@@ -195,7 +225,8 @@ nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>cit
 " inoremap ( ()<left>
 inoremap { {}<left>
 inoremap {; {};<left><left>
-inoremap {<CR> {<CR>}<ESC>O " inoremap {;<CR> {<CR>};<ESC>O 
+inoremap {<CR> {<CR>}<esc>O
+inoremap {;<CR> {<CR>};<ESC>O 
 " Edit my vimrc and go back to coding
 nnoremap <leader>evv :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>

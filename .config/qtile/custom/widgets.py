@@ -1,29 +1,50 @@
 from custom.bindings import get_keyboard
 from custom.coloring import apply_alpha_qtile
+from custom.extra import one_call
+from custom.functions import change_wallpaper
 from custom.theme import colors, img
+from functools import lru_cache
 from libqtile import widget
 from libqtile.command import lazy
 from libqtile.config import Click
 import os.path
 
 
-def keyboard(kbd,color):
+@one_call
+def wallpaper(color):
+    return widget.Wallpaper(
+        background=colors[color],
+        foreground=colors['light'],
+        fontsize=11,
+        padding=3,
+        margin=0,
+        directory=os.path.expanduser('~/.config/qtile/custom/wallpapers/'),
+        label='Wallpaper',
+        wallpaper_command=os.path.expanduser('~/.scripts/bg.sh').split(),
+    )
+
+
+@one_call
+def keyboard(kbd, color):
     kbd.foreground = colors['light']
     kbd.background = colors[color]
     return kbd
 
+
+@one_call
 def battery(color):
     return widget.Battery(
-            background = colors[color],
-            foreground = colors['light'],
-            charge_char = '\U0001F50C',
-            discharge_char = '\u26a1 ',
-            empty_char = '\u2620',
-            full_char = '\U0001f50b',
-            show_short_text = False,
-            format = '{char} {percent:2.2%} {watt:.2f} W',
-            update_interval = 1.5
-        )
+        background=colors[color],
+        foreground=colors['light'],
+        charge_char='\U0001F50C',
+        discharge_char='\u26a1 ',
+        empty_char='\u2620',
+        full_char='\U0001f50b',
+        show_short_text=False,
+        format='{char} {percent:2.2%} {watt:.2f} W',
+        update_interval=1.5
+    )
+
 
 def sep(p):
     return widget.Sep(
@@ -34,6 +55,7 @@ def sep(p):
     )
 
 
+@one_call
 def group_box():
     return widget.GroupBox(
         fontsize=11,
@@ -52,20 +74,24 @@ def group_box():
         other_screen_border=colors["dark"],
         foreground=colors["light"],
         background=colors["dark"],
-        highlight_color = apply_alpha_qtile(colors["dark"], colors["light"], 0.15),
+        highlight_color=apply_alpha_qtile(
+            colors["dark"], colors["light"], 0.15),
         font=defaults['font_alt'],
     )
 
+
+@one_call
 def window_name():
     return widget.WindowName(
         foreground=colors["primary"],
         background=colors["dark"],
-        show_state = True,
+        show_state=True,
         fontsize=defaults['fontsize'],
         font=defaults['font_alt']
     )
 
 
+@one_call
 def systray():
     return widget.Systray(
         background=colors["dark"],
@@ -81,6 +107,7 @@ def image(image):
     )
 
 
+@lru_cache(20)
 def text_box(s, bgcolor):
     return widget.TextBox(
         text=s,
@@ -90,6 +117,7 @@ def text_box(s, bgcolor):
     )
 
 
+@one_call
 def pacman(bgcolor):
     return widget.Pacman(
         execute="alacritty -e bash -c '~/.scripts/upgrading.sh'",
@@ -99,6 +127,7 @@ def pacman(bgcolor):
     )
 
 
+@one_call
 def net(bgcolor):
     return widget.Net(
         interface="wlp2s0",
@@ -107,6 +136,7 @@ def net(bgcolor):
     )
 
 
+@one_call
 def current_layout_icon(bgcolor):
     return widget.CurrentLayoutIcon(
         scale=0.65,
@@ -115,6 +145,7 @@ def current_layout_icon(bgcolor):
     )
 
 
+@one_call
 def current_layout(bgcolor):
     return widget.CurrentLayout(
         foreground=colors["light"],
@@ -123,6 +154,7 @@ def current_layout(bgcolor):
     )
 
 
+@one_call
 def clock(bgcolor):
     return widget.Clock(
         foreground=colors["light"],
@@ -131,8 +163,9 @@ def clock(bgcolor):
     )
 
 
+@one_call
 def init_laptop_widgets():
-    return [
+    widget_list = [
         sep(7),
         group_box(),
         sep(5),
@@ -158,18 +191,14 @@ def init_laptop_widgets():
         text_box(" 🕒", "primary"),
         clock("primary"),
         image('secondary'),
-        widget.Wallpaper(
-            background=colors["secondary"],
-            foreground=colors['light'],
-            fontsize=11,
-            padding=3,
-            margin=0,
-            directory=os.path.expanduser('~/.config/qtile/custom/wallpapers/'),
-            label='Wallpaper'
-        )
+        wallpaper('secondary')
     ]
+    # Change my wallpaper every 10 minutes
+    change_wallpaper(wallpaper(None), 10 * 60)
+    return widget_list
 
 
+@one_call
 def init_monitor_widgets():
     return [
         sep(5),

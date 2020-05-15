@@ -1,6 +1,6 @@
 # dotfiles
 
-![screenshot](./screenshot2.png)
+![screenshot](./screenshot.png)
 
 ## Acknowledgements
 

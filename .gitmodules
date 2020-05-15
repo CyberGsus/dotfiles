@@ -7,3 +7,6 @@
 [submodule ".config/nvim/plugged"]
 	path = .config/nvim/plugged
 	url = https://github.com/junegunn/vim-plug
+[submodule ".local/share/icons/candy-icons"]
+	path = .local/share/icons/candy-icons
+	url = https://github.com/EliverLara/candy-icons

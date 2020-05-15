@@ -98,8 +98,6 @@ add_user() {
   info "Installing dotfiles..."
   install git
   git clone --recurse-submodules https://github.com/CyberGsus/dotfiles /home/$username
-  rm -f /home/$username/.tmux.conf
-  ln -s /home/$username/.tmux/.tmux.conf .tmux.conf
   info "Restoring permissions..."
   chown -R $username:users /home/$username
   info "Configuring shell..."

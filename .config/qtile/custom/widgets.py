@@ -21,7 +21,7 @@ def wallpaper(color):
         fontsize=11,
         padding=3,
         margin=0,
-        directory=os.path.expanduser('~/.local/share/wallpapers/'),
+        directory=os.path.expanduser('~/.local/share/wallpapers/links/'),
         label='Wallpaper',
         # wallpaper_command=os.path.expanduser('~/.scripts/bg.sh').split(),
     )

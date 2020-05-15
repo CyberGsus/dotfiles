@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TRANSITION=1.75
+TRANSITION=2.75
 pushd ~/.config/qtile/custom/wallpapers > /dev/null
 current=$( [ -f current ] && cat current || echo "$1")
 cp -f $current old.bg
@@ -18,5 +18,6 @@ for i in `seq 100 -$TRANSITION 0`; do
 done
 feh --bg-fill new.bg
 rm -f *.bg
+sleep 1
 popd  > /dev/null
 

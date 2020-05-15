@@ -103,7 +103,7 @@ add_user() {
   info "Configuring shell..."
   chsh -s /bin/zsh $username
   info "Cleaning up..."
-  rm -rvf /home/$username/.git /home/$username/README.md /home/$username/screenshot.png
+  rm -rf /home/$username/.git /home/$username/README.md /home/$username/screenshot.png
   ok "User '$username' successfully added."
 }
 

@@ -10,3 +10,9 @@ great authors get their deserved respect:
 
 - Theme : https://www.pling.com/p/1253385
 - Icons : https://www.pling.com/p/1305251
+
+Not to forget the people who inspired me to start this project and
+gave me a starting point:
+  - Antonio Sarosi:
+    - https://github.com/antoniosarosi/dotfiles
+    - https://www.youtube.com/channel/UCzTi9I3zApECTkukkMOpEEA

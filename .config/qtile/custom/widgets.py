@@ -1,8 +1,3 @@
-from custom.bindings import get_keyboard
-from custom.coloring import apply_alpha_qtile
-from custom.extra import one_call
-from custom.functions import change_wallpaper
-from custom.theme import colors, img
 from functools import lru_cache
 from libqtile import widget
 from libqtile.command import lazy
@@ -10,17 +5,25 @@ from libqtile.config import Click
 import os.path
 
 
+from custom.bindings import get_keyboard
+from custom.coloring import apply_alpha_qtile
+from custom.extra import one_call
+from custom.functions import change_wallpaper
+from custom.theme import colors, img
+from custom.wallpapers.wrapper import ExtendedWallpaper
+
+
 @one_call
 def wallpaper(color):
-    return widget.Wallpaper(
+    return ExtendedWallpaper(
         background=colors[color],
         foreground=colors['light'],
         fontsize=11,
         padding=3,
         margin=0,
-        directory=os.path.expanduser('~/.config/qtile/custom/wallpapers/'),
+        directory=os.path.expanduser('~/.local/share/wallpapers/'),
         label='Wallpaper',
-        wallpaper_command=os.path.expanduser('~/.scripts/bg.sh').split(),
+        # wallpaper_command=os.path.expanduser('~/.scripts/bg.sh').split(),
     )
 
 
@@ -194,7 +197,7 @@ def init_laptop_widgets():
         wallpaper('secondary')
     ]
     # Change my wallpaper every 10 minutes
-    change_wallpaper(wallpaper(None), 10 * 60)
+    change_wallpaper(wallpaper(None), 20 * 60)
     return widget_list
 
 
@@ -220,3 +223,8 @@ defaults = dict(
     fontsize=12,
     padding=2,
 )
+try:
+    import os
+    os.remove(os.path.expanduser('~/.local/share/wallpapers/current'))
+except:
+    pass

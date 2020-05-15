@@ -16,10 +16,11 @@ def change_theme(alacritty_file, theme_file):
         if "colors" in theme:
             alacritty["colors"] = theme["colors"]
         else:
-            print("Theme \"{theme_file}\" has no color configuration."
+            print("Theme \"{theme_file}\" has no color configuration.")
 
         with open(alacritty_file, 'w') as f: 
             yaml.dump(alacritty, f)
+
     except PermissionError as e:
         print("Can't read/write {0.filename} : Not allowed".format(e))
     except yaml.YAMLError as e:
@@ -47,8 +48,6 @@ if __name__ == '__main__':
     else:
         print("Theme could not be applied.")
     
-
-
 
 
 

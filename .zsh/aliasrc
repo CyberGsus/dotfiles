@@ -25,6 +25,28 @@ ex ()
   fi 
 } 
 
+compr() {
+  local usage="Usage: compress <TYPE> <FILE>
+  In which TYPE is of:
+  tgz => *.tar.gz
+  tbz => *.tar.bz2
+  zip => *.zip
+  7z  => *.7z
+  "
+  [ -z "$1" ] || [ -z "$2" ] && (echo "$usage"; exit 1)
+  [ -f "$2" ] || (echo "'$2' cannot be interpreted as a file"; exit 1)
+  case $1 in
+    tbz)      tar cvjf  $2.tar.bz2    $2    ;;
+    tgz)      tar cvzf  $2.tar.gz     $2    ;;
+    zip)      zip -r   $2.zip         $2    ;;
+    7z)       7z a $2.7z              $2    ;;
+    *)
+        echo "$usage"
+        return 1
+        ;;
+  esac
+}
+
 export EDITOR=nvim
 
 alias pacman-update='sudo pacman-mirrors --geoip'

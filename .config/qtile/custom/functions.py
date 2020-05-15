@@ -3,9 +3,11 @@ from libqtile import hook
 from libqtile.config import Group
 from custom.extra import TmuxSessionManager, InfiniteTimer
 from threading import Timer
+from time import sleep
 import os
 
 globals()['tmux_session_manager'] = TmuxSessionManager('alacritty -e')
+
 
 def next_keyboard_layout(keyboard):
     @lazy.function
@@ -17,6 +19,7 @@ def next_keyboard_layout(keyboard):
             qtile_session.restart()
     __inner.keyboard = keyboard
     return __inner
+
 
 @lazy.function
 def quit_qtile(qtile_session):
@@ -36,6 +39,6 @@ def on_group_add(qtile, group):
     groups.append(group)
 
 
-
 def change_wallpaper(wallpaper_obj, timeout):
-    InfiniteTimer(timeout, wallpaper_obj.button_press, 0, 0, 1).start()
+    InfiniteTimer(
+        timeout, wallpaper_obj.next_wallpaper).start()

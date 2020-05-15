@@ -8,8 +8,6 @@ endfunction
 function CWrite()
   normal mm
   call FixStyle()
-  execute "normal <leader><tab>" | " auto-indent, see ../init.vim
-  normal `m
 endfunction
 
 
@@ -18,5 +16,5 @@ imap <leader>inc< #include <>jki
 imap <leader>inc" #include ""jki
 iabbr /* /* */jk2hi
 augroup languages_c
-  autocmd BufWritePre * call CWrite ()
+  autocmd BufWritePre *.c call CWrite ()
 augroup END

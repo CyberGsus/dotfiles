@@ -31,7 +31,7 @@ Plug 'christoomey/vim-system-copy'      " Copying to system buffer
 " Plug 'kana/vim-textobj-indent'          " Better indenting
 
 " Linting
-Plug 'dense-analysis/ale'
+" Plug 'dense-analysis/ale'
 " File Browser
 Plug 'vifm/vifm.vim'
 
@@ -81,7 +81,7 @@ let g:lightline = {
       \ ],
       \},
       \ 'component' : { 
-      \   'filename' : '%F',
+      \   'filename' : '%f',
       \   'modified' : '%m',
       \   'charvaluehex' : '0x%b'
       \ },
@@ -201,7 +201,6 @@ let g:ale_fix_on_save=1
 let g:ale_fixers = {
       \ 'javascript' : [
       \ 'eslint',
-      \ {buffer, lines -> filter (lines, 'v:val !=~ ''^\s*//''')},
       \ ],
       \ 'python' : [
       \ 'autopep8',

@@ -10,12 +10,12 @@ from libqtile.command import lazy
 from libqtile.config import Key, Group, Drag, Click
 
 # Custom Conf
-from custom.startup import keys, current_special
+from custom.bindings import mod
 from custom.groups import init_groups
 from custom.screens import init_screens
+from custom.startup import keys, current_special
 from custom.theme import colors
 from custom.widgets import defaults # Add-ons
-from custom.bindings import mod
 # Basic Config
 
 widget_defaults = defaults

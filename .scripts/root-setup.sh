@@ -49,23 +49,30 @@ uninstall() {
 }
 
 install_grub() {
+  info "Installing GRUB..."
+  install grub2 os-prober
   [ -d /sys/firmware/efi/efivars ] && install_grub_efi || install_grub_bios
+  info "Installing GRUB theme..."
+  git clone git://github.com/Generator/Grub2-themes.git
+  cp -r Grub2-themes/Archlinux /boot/grub/themes/
+  rm -rf Grub2-themes
+  ok "Theme installed."
+  info "Configuring GRUB..."
+  vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/Archlinux/theme.txt\""' -c 'execute "silent! normal! /^GRUB_CFXMODE=\<cr>3wC1024x768"' -c 'wqa!' /etc/default/grub
+  ok "GRUB Installed!"
 }
 
 install_grub_efi() {
   info "Installing GRUB for EFI..."
-  install grub os-prober efibootmgr && \
+  install efiboomgr && \
     grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB && \
-    grub-mkconfig -o /boot/grub/grub.cfg && \
     ok "Grub successfully installed" || err "Could not install GRUB to /boot."
   }
 
 install_grub_bios() {
   local disk=`lsblk -lp | awk '/\/$/ {print $1}' | sed 's/[0-9]*//g' | uniq`
   info "Installing GRUB for BIOS at $disk..."
-  install grub os-prober && \
-    grub-install --target=i386-pc $disk && \
-    grub-mkconfig -o /boot/grub/grub.cfg && \
+  grub-install --target=i386-pc $disk && \
     ok "Grub successfully installed" || err "Could not install GRUB to $disk."
   }
 
@@ -130,6 +137,11 @@ install_de() {
   info "Installing drivers..."
   install xf86-video-intel xf86-video-vmware
   info "Installing desktop environment..."
+
+  # Get the network address
+  local ifname=`ip route | cut -d$'\n' | cut -d' ' -f5`
+  vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
+  
   info "Installing window manager..."
   install_aur xorg-server xorg-apps xorg-xinit qtile xterm
   info "Installing display manager..."
@@ -142,7 +154,8 @@ install_de() {
   chsh -s /bin/zsh $username || err "Something went wrong!"
 
   info "Installing neovim plugins..."
-  as_user nvim -c 'PlugInstall'  -c 'qa!'
+  as_user nvim -c 'qa!'
+  as_user nvim -c 'PlugInstall' -c 'qa!'
   info "Installing necessary python modules..."
   install python python-pip
   python3 -m pip install -U pip wheel setuptools
@@ -150,8 +163,6 @@ install_de() {
   install_aur python-xdg python-mpd2 python-iwlib python-dateutil python-keyring
   info "Installing fonts..."
   install_aur ttf-anonymous-pro ttf-droid ttf-font-awesome ttf-hack ttf-hackgen ttf-ibm-plex-mono ttf-ibm-plex ttf-inconsolata ttf-jetbrains-mono ttf-lato ttf-opensans ttf-roboto ttf-roboto-mono ttf-ubuntu-font-family noto-fonts-all
-  info "Configuring pacman..."
-  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xnx"' -c 'wqa!' /etc/pacman.conf
   ok "Installed desktop environment successfully"
 }
 
@@ -161,15 +172,16 @@ install_blackarch() {
   chmod +x strap.sh
   sh strap.sh
   rm -f strap.sh
-  info "Changing OS info..."
-  vim -c 'execute "normal! /NAME\<cr>2wciwBlackArch\<esc>n2w./LOGO\<cr>2wciwblackarch\<esc>"' -c 'wqa!' /usr/lib/os-release
+  info "Changing neofetch config..."
+  [ -e /home/$username/.config/neofetch/config.conf ] && vim -c 'execute "silent! normal! /ascii_distro=\<cr>f"lci"blackarch\<esc>"' -c 'wqa!' /home/$username/.config/neofetch/config.conf
 }
 
 [ $EUID = 0 ] || err "You are not root!" # Only run as root
 # 0. Install some tools
 if [ -z "$1" ]; then
   info "Base Install"
-  read
+  info "Configuring pacman..."
+  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
   install wget curl vim base-devel
 
   # 1. Configure timezone and clock
@@ -192,13 +204,12 @@ if [ -z "$1" ]; then
   networking
   # Add script to bash_profile so executed on root login
   [ -f $HOME/.bash_profile ] && mv $HOME/.bash_profile $HOME/.bash_profile.bak
-  echo "sh /$0 a" > $HOME/.bash_profile
+  script_path=find / 2>/dev/null | grep "$0"
+  echo "sh $script_path a" > $HOME/.bash_profile
   ok "Base Install complete! Please dont forget to genfstab, unmount and reboot :)"
 else
   [ -f $HOME/.bash_profile.bak ] && mv -f $HOME/.bash_profile.bak $HOME/.bash_profile
   vim -c "%!grep -v \"/$0\"" -c 'wqa!' $HOME/.bash_profile
-  info "User Install"
-  read
   add_user
   install_trizen
   install_de

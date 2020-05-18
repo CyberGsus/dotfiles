@@ -13,8 +13,6 @@
 #   2. move it to /mnt after running pacstrap
 #   3. arch-chroot sh root-setup.sh
 
-# TODO: on installing, qtile is preconfigured to watch a 'wlp2s0' device.
-# maybe I should ask and modify it accordingly using vim commands
 info() {
   echo -e "\x1b[1;38;5;255m[\x1b[1;38;5;69m*\x1b[1;38;5;255m] $@\x1b[m"
 }
@@ -35,7 +33,7 @@ install_aur() {
 
 uninstall_aur() {
   command -v trizen > /dev/null 2>&1 || err "trizen not installed!"
-  as_user trizen -Rnsc --noconfirm --needed $@ && ok "Uninstalled \"$@\" from AUR helper" || err "Could not install from AUR helper"
+  as_user trizen -Rnsc --noconfirm --needed $@ && ok "Uninstalled \"$@\" from AUR helper" || err "Could not uninstall from AUR helper"
 }
 
 install() {
@@ -52,15 +50,14 @@ install_grub() {
   info "Installing GRUB..."
   install grub os-prober
   [ -d /sys/firmware/efi/efivars ] && install_grub_efi || install_grub_bios
-  info "Installing GRUB theme..."
-  git clone https://github.com/fghibellini/arch-silence
-  vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/arch-silence/theme.txt\"\<esc>"' -c 'wqa!' /etc/default/grub
-  pushd arch-silence
-  sh install.sh
-  popd
-  rm -rf arch-silence
-  ok "Theme installed."
-  info "Configuring GRUB..."
+  # info "Installing GRUB theme..."
+  # git clone https://github.com/fghibellini/arch-silence
+  # vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/arch-silence/theme.txt\"\<esc>"' -c 'wqa!' /etc/default/grub
+  # pushd arch-silence
+  # sh install.sh
+  # popd
+  # rm -rf arch-silence
+  # ok "Theme installed."
   ok "GRUB Installed!"
 }
 
@@ -164,7 +161,7 @@ install_de() {
   install iproute2
   local ifname=`ip route | cut -d$'\n' | cut -d' ' -f5`
   vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
-  
+
   info "Installing window manager..."
   install_aur xorg-server xorg-apps xorg-xinit qtile xterm
   info "Installing display manager..."
@@ -203,6 +200,8 @@ install_blackarch() {
 # 0. Install some tools
 if [ -z "$1" ]; then
   info "Base Install"
+  info "Configuring pacman..."
+  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
   install wget curl vim base-devel # dialog
 
   # 1. Configure timezone and clock
@@ -229,8 +228,6 @@ if [ -z "$1" ]; then
   echo "sh $script_path a" > $HOME/.bash_profile
   ok "Base Install complete! Please dont forget to genfstab, unmount and reboot :)"
 else
-  info "Configuring pacman..."
-  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
   [ -f $HOME/.bash_profile.bak ] && mv -f $HOME/.bash_profile.bak $HOME/.bash_profile
   vim -c "%!grep -v \"/$0\"" -c 'wqa!' $HOME/.bash_profile
   add_user

@@ -157,7 +157,7 @@ install_de() {
 
   # Get the network address from default routing
   install iproute2
-  local ifname=`ip route | cut -d$'\n' | cut -d' ' -f5`
+  local ifname=`ip route | cut -d$'\n' -f1 | cut -d' ' -f5`
   vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
 
   info "Installing window manager..."

@@ -53,12 +53,14 @@ install_grub() {
   install grub os-prober
   [ -d /sys/firmware/efi/efivars ] && install_grub_efi || install_grub_bios
   info "Installing GRUB theme..."
-  git clone git://github.com/Generator/Grub2-themes.git
-  cp -r Grub2-themes/Archlinux /boot/grub/themes/
-  rm -rf Grub2-themes
+  git clone https://github.com/fghibellini/arch-silence
+  vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/arch-silence/theme.txt\"\<esc>"' -c 'wqa!' /etc/default/grub
+  pushd arch-silence
+  sh install.sh
+  popd
+  rm -rf arch-silence
   ok "Theme installed."
   info "Configuring GRUB..."
-  vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/Archlinux/theme.txt\""' -c 'execute "silent! normal! /^GRUB_CFXMODE=\<cr>3wC1024x768"' -c 'wqa!' /etc/default/grub
   ok "GRUB Installed!"
 }
 
@@ -110,7 +112,7 @@ add_user() {
   info "Configuring shell..."
   chsh -s /bin/zsh $username
   info "Cleaning up..."
-  rm -rf /home/$username/.git /home/$username/README.md /home/$username/screenshot.png
+  rm -rf /home/$username/.git* /home/$username/README.md /home/$username/screenshot.png
   ok "User '$username' successfully added."
 }
 
@@ -132,26 +134,26 @@ install_trizen() {
   popd
 }
 
-format_dialog() {
-  declare -i j=1
-  for i in $@; do
-    echo $j $i
-    (( j++ ))
-  done
-}
-
-choose_dialog() {
-  local title=$1
-  shift
-  local opts=`format_dialog $@`
-  declare -i chosen=$(dialog --clear --menu "$menu_title" 15 40 4 $opts 2>&1 > /dev/tty)
-  local j=1
-  for i in $@; do
-    [ $j -eq $chosen ] && break
-    (( j++ ))
-  done
-  echo $i
-}
+# format_dialog() {
+#   declare -i j=1
+#   for i in $@; do
+#     echo $j $i
+#     (( j++ ))
+#   done
+# }
+# 
+# choose_dialog() {
+#   local title=$1
+#   shift
+#   local opts=`format_dialog $@`
+#   declare -i chosen=$(dialog --clear --menu "$menu_title" 15 40 4 $opts 2>&1 > /dev/tty)
+#   local j=1
+#   for i in $@; do
+#     [ $j -eq $chosen ] && break
+#     (( j++ ))
+#   done
+#   echo $i
+# }
 
 install_de() {
   info "Installing drivers..."
@@ -201,7 +203,7 @@ install_blackarch() {
 # 0. Install some tools
 if [ -z "$1" ]; then
   info "Base Install"
-  install wget curl vim base-devel dialog
+  install wget curl vim base-devel # dialog
 
   # 1. Configure timezone and clock
   info "Configuring basic stuff..."

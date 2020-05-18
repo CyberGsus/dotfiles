@@ -50,7 +50,7 @@ uninstall() {
 
 install_grub() {
   info "Installing GRUB..."
-  install grub2 os-prober
+  install grub os-prober
   [ -d /sys/firmware/efi/efivars ] && install_grub_efi || install_grub_bios
   info "Installing GRUB theme..."
   git clone git://github.com/Generator/Grub2-themes.git
@@ -132,13 +132,34 @@ install_trizen() {
   popd
 }
 
+format_dialog() {
+  declare -i j=1
+  for i in $@; do
+    echo $j $i
+    (( j++ ))
+  done
+}
+
+choose_dialog() {
+  local title=$1
+  shift
+  local opts=`format_dialog $@`
+  declare -i chosen=$(dialog --clear --menu "$menu_title" 15 40 4 $opts 2>&1 > /dev/tty)
+  local j=1
+  for i in $@; do
+    [ $j -eq $chosen ] && break
+    (( j++ ))
+  done
+  echo $i
+}
 
 install_de() {
   info "Installing drivers..."
-  install xf86-video-intel xf86-video-vmware
+  install xorg-drivers
   info "Installing desktop environment..."
 
-  # Get the network address
+  # Get the network address from default routing
+  install iproute2
   local ifname=`ip route | cut -d$'\n' | cut -d' ' -f5`
   vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
   
@@ -180,9 +201,7 @@ install_blackarch() {
 # 0. Install some tools
 if [ -z "$1" ]; then
   info "Base Install"
-  info "Configuring pacman..."
-  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
-  install wget curl vim base-devel
+  install wget curl vim base-devel dialog
 
   # 1. Configure timezone and clock
   info "Configuring basic stuff..."
@@ -208,6 +227,8 @@ if [ -z "$1" ]; then
   echo "sh $script_path a" > $HOME/.bash_profile
   ok "Base Install complete! Please dont forget to genfstab, unmount and reboot :)"
 else
+  info "Configuring pacman..."
+  vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
   [ -f $HOME/.bash_profile.bak ] && mv -f $HOME/.bash_profile.bak $HOME/.bash_profile
   vim -c "%!grep -v \"/$0\"" -c 'wqa!' $HOME/.bash_profile
   add_user

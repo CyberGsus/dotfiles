@@ -53,11 +53,9 @@ install_grub() {
   # info "Installing GRUB theme..."
   # git clone https://github.com/fghibellini/arch-silence
   # vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/arch-silence/theme.txt\"\<esc>"' -c 'wqa!' /etc/default/grub
-  # pushd arch-silence
-  # sh install.sh
-  # popd
   # rm -rf arch-silence
-  # ok "Theme installed."
+  ok "Theme installed."
+  grub-mkconfig -o /boot/grub/grub.cfg
   ok "GRUB Installed!"
 }
 

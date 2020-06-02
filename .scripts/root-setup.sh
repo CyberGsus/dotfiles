@@ -222,11 +222,10 @@ if [ -z "$1" ]; then
   networking
   # Add script to bash_profile so executed on root login
   [ -f $HOME/.bash_profile ] && mv $HOME/.bash_profile $HOME/.bash_profile.bak
-  script_path=find / 2>/dev/null | grep "$0"
-  echo "sh $script_path a" > $HOME/.bash_profile
+  echo "sh $0 a" > $HOME/.bash_profile
   ok "Base Install complete! Please dont forget to genfstab, unmount and reboot :)"
 else
-  [ -f $HOME/.bash_profile.bak ] && mv -f $HOME/.bash_profile.bak $HOME/.bash_profile
+  [ -f $HOME/.bash_profile.bak ] && mv -f $HOME/.bash_profile.bak $HOME/.bash_profile || rm -r $HOME/.bash_profile
   vim -c "%!grep -v \"/$0\"" -c 'wqa!' $HOME/.bash_profile
   add_user
   install_trizen
@@ -235,6 +234,9 @@ else
   install openssh
   systemctl enable sshd
   install_blackarch
+  install xargs
+  # remove unneeded stuff
+  pacman -Qdtq | xargs pacman -Rns
   # vim -c 'execute "silent! normal! /PermitRootLogin\<cr>^xewciwyes\<esc>"' -c 'wqa!' /etc/ssh/sshd_config # enable root login
   rm -f "$0" # delete the script
 fi

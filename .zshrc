@@ -3,8 +3,9 @@
 #   Sindre Sorhus       <https://github.com/sindresorhus/pure>
 #   Chis Titus          <https://github.com/ChrisTitusTech/zsh>
 
-setopt autocd
-setopt vi 
+setopt autocd         # auto cd into directory when specified as command
+setopt vi             # <esc> brings up vi bindings
+setopt autopushd      # push directory when cd'ing
 
 PATH+=':.local/bin'
 

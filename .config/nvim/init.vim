@@ -16,10 +16,13 @@ call plug#begin('~/.vim/plugged')
 Plug 'itchyny/lightline.vim'
 Plug 'hzchirs/vim-material'
 Plug 'preservim/nerdtree'               " File Tree
+Plug 'prettier/vim-prettier'
 " Essential!!
 " From christoomey <https://www.youtube.com/watch?v=wlR5gYd6um0&t=1545s>
 
+" Plug 'integralist/vim-mypy'
 Plug 'tpope/vim-repeat'                 " Enables repeating plug commands
+Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'               " Change surrounding stuff (quotes, bquotes)
 Plug 'tpope/vim-commentary'             " Commenting lines
 Plug 'tpope/vim-fugitive'
@@ -29,14 +32,13 @@ Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'christoomey/vim-sort-motion'      " Sorting faster
 Plug 'christoomey/vim-system-copy'      " Copying to system buffer
 " Plug 'kana/vim-textobj-indent'          " Better indenting
+Plug 'neomake/neomake'
 
-" Linting
-" Plug 'dense-analysis/ale'
-" File Browser
-Plug 'vifm/vifm.vim'
 
-" Plug 'neoclide/coc.nvim', { 'branch' : 'release' }   " Autocompletion
+Plug 'sophacles/vim-processing'
+Plug 'pangloss/vim-javascript'
 call plug#end()
+packloadall
 
 set nocompatible
 filetype plugin indent on
@@ -83,7 +85,7 @@ let g:lightline = {
       \ 'component' : { 
       \   'filename' : '%f',
       \   'modified' : '%m',
-      \   'charvaluehex' : '0x%b'
+      \   'charvaluehex' : '0x%B'
       \ },
       \ 'component_function' : {
       \ 'gitbranch' : 'fugitive#head',
@@ -95,6 +97,8 @@ let g:lightline.separator = {
 let g:lightline.subseparator = {
       \   'left': '', 'right': '' 
       \}
+
+let g:javascript_plugin_jsdoc = 1
 " let g:airline_theme='material'
 set background=dark
 colorscheme vim-material
@@ -237,3 +241,6 @@ inoremap jk <Esc>
 " Auto indent
 nnoremap <leader><tab> mmgg=G`m
 source $HOME/.config/nvim/languages.vim
+
+map <C-j> :cn<CR>
+map <C-k> :cp<CR>

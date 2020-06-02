@@ -299,3 +299,5 @@ bind C-x send-prefix
 bind * setw -g synchronize-panes
 # move status line to top
 #set -g status-position top
+bind-key C-j command-prompt -p "join pane from:"  "join-pane -s '%%'"
+bind-key C-s command-prompt -p "send pane to:"  "join-pane -t '%%'"

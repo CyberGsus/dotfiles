@@ -1,11 +1,12 @@
 
-function FixStyle()
+
+function! FixStyle()
   execute "silent! %s/\\\>([^)]/ \\0/g" | " main (void) => main (void)
   "  execute "silent! %s/\\\>[=+-<>/!]\\+/ \\0/g" | " a+b => a +b
 endfunction
 
 
-function CWrite()
+function! CWrite()
   normal mm
   call FixStyle()
 endfunction
@@ -16,5 +17,5 @@ imap <leader>inc< #include <>jki
 imap <leader>inc" #include ""jki
 iabbr /* /* */jk2hi
 augroup languages_c
-  autocmd BufWritePre *.c call CWrite ()
+  autocmd BufWritePre *.{c,h} call CWrite ()
 augroup END

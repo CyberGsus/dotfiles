@@ -17,8 +17,16 @@ LINK_DIR=${LINK_DIR:-$WALLPAPER_DIR/links}
 [ -d "$WALLPAPER_DIR" ] || mkdir -p "$WALLPAPER_DIR"
 [ -d "$LINK_DIR" ]      || mkdir -p "$LINK_DIR"
 
+
+link_wallpaper() {
+  [ -e "$LINK_DIR/${1##*/}" ] && return 1
+  [ ! -f "$1" ] && return 1
+  return $(ln -s "$1" "$LINK_DIR/${file##*/}")
+}
+
 for file in $WALLPAPER_DIR/**/*; do
-  [ -e "$LINK_DIR/${file##*/}" ] && continue # if file/link already exists in directory, dont make it
-  [ ! -f "$file" ] && continue # if file is directory, dont process it
-  ln -s "$file" "$LINK_DIR/${file##*/}"
+  link_wallpaper $file
+done
+for file in $WALLPAPER_DIR/*; do
+  link_wallpaper $file
 done

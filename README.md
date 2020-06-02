@@ -16,3 +16,8 @@ gave me a starting point:
   - Antonio Sarosi:
     - https://github.com/antoniosarosi/dotfiles
     - https://www.youtube.com/channel/UCzTi9I3zApECTkukkMOpEEA
+
+## More stuff
+
+On the [TODO](./TODO.md) list I have everything I want to have done with
+this repository aside from customizing configurations.

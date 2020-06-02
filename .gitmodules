@@ -16,6 +16,3 @@
 [submodule ".config/--force"]
 	path = .config/--force
 	url = https://github.com/CyberGsus/awesome-config
-[submodule "awesome"]
-	path = .config/awesome
-	url = https://github.com/CyberGsus/awesome-config

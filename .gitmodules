@@ -13,6 +13,3 @@
 [submodule ".config/qtile-config"]
 	path = .config/qtile-config
 	url = https://github.com/CyberGsus/qtile-config
-[submodule ".config/--force"]
-	path = .config/--force
-	url = https://github.com/CyberGsus/awesome-config

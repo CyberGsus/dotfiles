@@ -101,13 +101,20 @@ add_user() {
   vim -c 'execute "normal! /Runas\<cr>2kiDefaults insults\<esc>/%wheel\<cr>^2xn^2x"' -c 'wqa!' /etc/sudoers
   info "Installing dotfiles..."
   install git
-  git clone --recurse-submodules https://github.com/CyberGsus/dotfiles /home/$username
+  git clone https://github.com/CyberGsus/dotfiles /home/$username
+  # Forca zsh
+  install zsh
+  pushd /home/$username
+  for submodule in .zsh .local/share/icons/candy-icons .tmux .zsh/pure .config/nvim/plugged; do
+    git submodule update --init --recursive $submodule
+  done
+  popd
   info "Restoring permissions..."
   chown -R $username:users /home/$username
   info "Configuring shell..."
   chsh -s /bin/zsh $username
   info "Cleaning up..."
-  rm -rf /home/$username/.git* /home/$username/README.md /home/$username/screenshot.png
+  rm -rf /home/$username/README.md /home/$username/screenshot.png
   ok "User '$username' successfully added."
 }
 
@@ -121,77 +128,144 @@ as_user() {
 
 install_trizen() {
   info "Installing trizen..."
+  install pacman-contrib
   git clone https://aur.archlinux.org/trizen /home/$username/trizen
   chown -R $username:users /home/$username/trizen
   pushd /home/$username/trizen
   as_user makepkg -si --noconfirm --needed
-  rm -rf "/home/$username/trizen"
   popd
+  rm -rf "/home/$username/trizen"
 }
 
-# format_dialog() {
-#   declare -i j=1
-#   for i in $@; do
-#     echo $j $i
-#     (( j++ ))
-#   done
-# }
-# 
-# choose_dialog() {
-#   local title=$1
-#   shift
-#   local opts=`format_dialog $@`
-#   declare -i chosen=$(dialog --clear --menu "$menu_title" 15 40 4 $opts 2>&1 > /dev/tty)
-#   local j=1
-#   for i in $@; do
-#     [ $j -eq $chosen ] && break
-#     (( j++ ))
-#   done
-#   echo $i
-# }
+format_dialog() {
+  declare -i j=1
+  for i in $@; do
+    echo $j $i
+    (( j++ ))
+  done
+}
+
+choose_dialog() {
+  local title=$1
+  shift
+  declare -i chosen=`format_dialog $@ | xargs dialog --menu "$title" 15 40 4 2>&1 /dev/tty`
+  declare -i j=1
+  for i in $@; do
+    [ $j -eq $chosen ] && break
+    (( j++ ))
+  done
+  echo $i
+}
+
 
 install_de() {
   info "Installing drivers..."
   install xorg-drivers
   info "Installing desktop environment..."
+  install python python-pip
 
-  # Get the network address from default routing
-  install iproute2
-  local ifname=`ip route | cut -d$'\n' -f1 | cut -d' ' -f5`
-  vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
+  local chosen_wm=$(choose_dialog 'Which Desktop Environment to Use?' qtile awesome)
 
-  info "Installing window manager..."
-  install_aur xorg-server xorg-apps xorg-xinit qtile xterm
+  case "$chosen_wm" in
+    'qtile')
+      info "Installing qtile..."
+      install_aur xorg-server xorg-apps xorg-xinit qtile xterm
+      info "Setting up qtile configuration..."
+      pushd /home/$username
+      as_user git submodule init --recurse .config/qtile-config
+      as_user ln -s ~/.config/qtile ~/.config/qtile-config
+      popd
+      info 'Installing widget deps...'
+      pip3 install -U psutil numpy pillow
+
+
+      install_aur python-xdg python-mpd2 python-iwlib python-dateutil python-keyring dmenu iproute2
+
+      # Get the network address from default routing
+      local ifname=`ip route | cut -d$'\n' -f1 | cut -d' ' -f5`
+      vim -c "execute \"silent! normal! /wlp2s0\\<cr>ciw$ifname\\<esc>\"" -c 'wqa!' /home/$username/.config/qtile/custom/widgets.py
+
+
+      ok "Qtile installed"
+
+      ;;
+    'awesome')
+      info "Installing awesome..."
+      install awesome
+      info "Setting up awesome configuration..."
+      pushd /home/$username/
+      as_user git submodule update --recursive .config/awesome
+      as_user cd ~/.config/awesome '&&' sh setup.sh
+      popd
+      ok "Awesome installed"
+      ;;
+  esac
+
   info "Installing display manager..."
-  install_aur lightdm lightdm-webkit2-greeter lightdm-webkit-theme-aether
+  install_aur lightdm-webkit-theme-aether
   systemctl enable lightdm
   info "Installing utilities..."
   install_aur emojione-picker-git network-manager-applet blueman light-locker picom xbindkeys usbutils
   info "Installing programs..."
-  install_aur qutebrowser neovim alacritty discord tmux zsh zsh-autosuggestions zsh-syntax-highlighting autojump neofetch imagemagick nautilus dmenu
-  chsh -s /bin/zsh $username || err "Something went wrong!"
+  install_aur qutebrowser neovim alacritty discord tmux zsh-autosuggestions zsh-syntax-highlighting autojump neofetch imagemagick nautilus
 
   info "Installing neovim plugins..."
-  as_user nvim -c 'qa!'
+  as_user nvim -c 'qa!' # Crashes
   as_user nvim -c 'PlugInstall' -c 'qa!'
-  info "Installing necessary python modules..."
-  install python python-pip
-  python3 -m pip install -U pip wheel setuptools
-  pip3 install -U psutil numpy pillow
-  install_aur python-xdg python-mpd2 python-iwlib python-dateutil python-keyring
   info "Installing fonts..."
-  install_aur ttf-anonymous-pro ttf-droid ttf-font-awesome ttf-hack ttf-hackgen ttf-ibm-plex-mono ttf-ibm-plex ttf-inconsolata ttf-jetbrains-mono ttf-lato ttf-opensans ttf-roboto ttf-roboto-mono ttf-ubuntu-font-family noto-fonts-all
+  install_aur ttf-droid ttf-font-awesome ttf-hack ttf-ibm-plex ttf-inconsolata ttf-jetbrains-mono ttf-lato ttf-opensans ttf-roboto ttf-roboto-mono ttf-ubuntu-font-family noto-fonts-all
+  # Remove git stuff from home directory
+  rm -rf /home/$username/.git*
+  info "Installing cursor..."
+  install_aur breeze-snow-cursor-theme
+  vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>f=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.config/gtk-3.0/settings.ini
+  vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>ci\"Breeze_Snow\<esc>"' -c 'wqa!' ~/.gtkrc-2.0
+  vim -c 'execute "silent! normal! jf=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.icons/default/index.theme
   ok "Installed desktop environment successfully"
 }
 
 install_blackarch() {
   info "Installing BlackArch Repos..."
-  curl -O https://blackarch.org/strap.sh
-  chmod +x strap.sh
-  sh strap.sh
-  rm -f strap.sh
-  info "Changing neofetch config..."
-  [ -e /home/$username/.config/neofetch/config.conf ] && vim -c 'execute "silent! normal! /ascii_distro=\<cr>f"lci"blackarch\<esc>"' -c 'wqa!' /home/$username/.config/neofetch/config.conf
+  # Make tmp directory
+  tmp="$(mktemp -d /tmp/blackarch_xtrap.XXXXXXXX)"
+  trap 'rm -rf $tmp' EXIT
+  pushd $tmp || exit 1
+
+  # Check internet
+  curl -s --connect-timeout 8 https://archlinux.org > /dev/null 2>&1 || exit 1
+
+  # Fetch keyring
+  curl -fO 'https://www.blackarch.org/keyring/blackarch-keyring.pkg.tar.xz{,.sig}'
+
+  # Verify keyring
+  ## Download key
+  for serv in pgp.mit.edu hkp://pool.sks-keyservers.net; do
+    gpg --keyserver $serv --recv-keys 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && break
+  done
+  [ $? -eq 0 ] || exit 1
+
+## Verify signature
+gpg --keyserver-options no-auto-key-retrieve \
+  --with-fingerprint blackarch-keyring.pkg.tar.xz.sig > /dev/null 2>&1 || exit 1
+
+# remove signature
+[ -f "blackarch-keyring.pkg.tar.xz.sig" ] && rm -f blackarch-keyring.pkg.tar.xz.sig
+
+pacman-key --init
+
+# Install keyring
+pacman --config /dev/null --noconfirm -U blackarch-keyring.pkg.tar.xz || exit 1
+pacman-key --populate
+
+
+# Install mirrors
+curl https://blackarch.org/blackarch-mirrorlist -o /etc/pacman.d/blackarch-mirrorlist
+pacman -Syy
+ok "Blackarch Mirrors Installed."
+popd
+info "Changing neofetch config..."
+as_user 'neofetch; clear' # Make sure neofetch.conf is generated
+[ -e /home/$username/.config/neofetch/config.conf ] && vim -c 'execute "silent! normal! /ascii_distro=\<cr>f"lci"blackarch\<esc>"' -c 'wqa!' /home/$username/.config/neofetch/config.conf
 }
 
 [ $EUID = 0 ] || err "You are not root!" # Only run as root
@@ -199,8 +273,8 @@ install_blackarch() {
 if [ -z "$1" ]; then
   info "Base Install"
   info "Configuring pacman..."
+  install wget curl vim base-devel dialog xorg-xset
   vim -c 'execute "silent! normal! /Color\<cr>^x"' -c 'execute "normal! /\\[multilib\\]\<cr>^xjx"' -c 'wqa!' /etc/pacman.conf
-  install wget curl vim base-devel # dialog
 
   # 1. Configure timezone and clock
   info "Configuring basic stuff..."
@@ -234,9 +308,10 @@ else
   install openssh
   systemctl enable sshd
   install_blackarch
-  install xargs
   # remove unneeded stuff
   pacman -Qdtq | xargs pacman -Rns
+  # Remove NOPASSWD permissions from user
+  vim -c 'execute "silent! normal! /%wheel\<cr>n^i#\<esc"' -c 'wqa!'
   # vim -c 'execute "silent! normal! /PermitRootLogin\<cr>^xewciwyes\<esc>"' -c 'wqa!' /etc/ssh/sshd_config # enable root login
   rm -f "$0" # delete the script
 fi

@@ -7,6 +7,8 @@ setopt autocd         # auto cd into directory when specified as command
 setopt vi             # <esc> brings up vi bindings
 setopt autopushd      # push directory when cd'ing
 
+xset r rate 300 50   # faster scrolling with keye
+
 PATH+=':.local/bin'
 
 # Fallback left prompt
@@ -55,4 +57,3 @@ source /usr/share/autojump/autojump.zsh 2>/dev/null
 [ -f '/usr/share/nvm/init-nvm.sh' ] && source /usr/share/nvm/init-nvm.sh # nvm
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 export DOCKER_HIDE_LEGACY_COMMANDS=true # hide legacy command from docker
-neofetch

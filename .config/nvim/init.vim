@@ -2,9 +2,9 @@ set path+=**
 au!
 " Install vim-plug
 if empty (glob ('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs 
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC 
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   q!
 endif
 
@@ -53,7 +53,7 @@ if has ('termguicolors')
 endif
 
 
-set laststatus=2 
+set laststatus=2
 set autoread
 set noswapfile
 set nowritebackup
@@ -72,7 +72,7 @@ set wrap
 let g:material_style='oceanic'
 let g:lightline = {
       \ 'colorscheme' : 'material',
-      \ 'active' : { 
+      \ 'active' : {
       \ 'left' : [ [ 'mode', 'paste', ],
       \        [ 'gitbranch', 'readonly', 'filename', 'modified' ]
       \ ],
@@ -82,7 +82,7 @@ let g:lightline = {
       \         [ 'fileformat', 'fileencoding', 'filetype' ],
       \ ],
       \},
-      \ 'component' : { 
+      \ 'component' : {
       \   'filename' : '%f',
       \   'modified' : '%m',
       \   'charvaluehex' : '0x%B'
@@ -95,7 +95,7 @@ let g:lightline.separator = {
       \   'left': '', 'right': ''
       \}
 let g:lightline.subseparator = {
-      \   'left': '', 'right': '' 
+      \   'left': '', 'right': ''
       \}
 
 let g:javascript_plugin_jsdoc = 1
@@ -105,7 +105,7 @@ colorscheme vim-material
 
 " Credit : Andrea Pavoni        <https://github.com/andreapavoni/dotfiles>
 set ruler
-set expandtab   
+set expandtab
 set ts=2
 set softtabstop=2
 set shiftwidth=2
@@ -136,7 +136,7 @@ inoremap <Right> <nop>
 
 map S :%s//g<Left><Left>
 
-au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 
+au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
 au FileType make set noexpandtab
 
 au BufRead,BufNewFile {Gemfile,Rakefile,VagrantFile,Thorfile,config.ru} set ft=ruby
@@ -229,7 +229,7 @@ nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>cit
 inoremap { {}<left>
 inoremap {; {};<left><left>
 inoremap {<CR> {<CR>}<esc>O
-inoremap {;<CR> {<CR>};<ESC>O 
+inoremap {;<CR> {<CR>};<ESC>O
 " Edit my vimrc and go back to coding
 nnoremap <leader>evv :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -244,3 +244,14 @@ source $HOME/.config/nvim/languages.vim
 
 map <C-j> :cn<CR>
 map <C-k> :cp<CR>
+
+
+function! RemoveWhiteSpaces()
+  normal! mm
+  :%s/\s*$//g
+  normal! 'm
+endfunction
+
+
+
+au BufWritePre * call RemoveWhiteSpaces()

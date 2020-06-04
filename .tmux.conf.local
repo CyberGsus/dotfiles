@@ -33,7 +33,7 @@ tmux_conf_new_pane_reconnect_ssh=false
 # prompt for session name when creating a new session, possible values are:
 #   - true
 #   - false (default)
-tmux_conf_new_session_prompt=false
+tmux_conf_new_session_prompt=true
 
 
 # -- display -------------------------------------------------------------------
@@ -41,7 +41,7 @@ tmux_conf_new_session_prompt=false
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_theme_24b_colour=false
+tmux_conf_theme_24b_colour=true
 
 # window style
 tmux_conf_theme_window_fg='default'
@@ -182,13 +182,13 @@ tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d
 tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
 
 # status left style
-tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
-tmux_conf_theme_status_left_bg='#ffff00,#9e0ddd,#00afff'  # yellow, pink, white blue
+tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white, white
+tmux_conf_theme_status_left_bg='#ffff00,#9e0ddd,#00afff'  # yellow, magenta, light blue
 tmux_conf_theme_status_left_attr='bold,none,none'
 
 # status right style
-tmux_conf_theme_status_right_fg='#8a8a8a,#00ffaf,#a01fff' # light gray, white, black
-tmux_conf_theme_status_right_bg='#080808,#000000,#000000' # dark gray, red, white
+tmux_conf_theme_status_right_fg='#8a8a8a,#00ffaf,#a01fff' # light gray, green, magenta
+tmux_conf_theme_status_right_bg='#080808,#000000,#000000' # black, black, black
 tmux_conf_theme_status_right_attr='none,bold,bold'
 
 # pairing indicator

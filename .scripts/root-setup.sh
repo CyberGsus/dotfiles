@@ -54,6 +54,12 @@ install_grub() {
   # git clone https://github.com/fghibellini/arch-silence
   # vim -c 'execute "silent! normal! /^#GRUB_THEME\<cr>oGRUB_THEME=\"/boot/grub/themes/arch-silence/theme.txt\"\<esc>"' -c 'wqa!' /etc/default/grub
   # rm -rf arch-silence
+  inst git
+  git clone https://github.com/vinceliuice/grub2-themes
+  pushd grub2-themes
+  ./install.sh -l
+  popd
+  rm -rf grub2-themes
   ok "Theme installed."
   grub-mkconfig -o /boot/grub/grub.cfg
   ok "GRUB Installed!"
@@ -218,9 +224,9 @@ install_de() {
   rm -rf /home/$username/.git*
   info "Installing cursor..."
   install_aur breeze-snow-cursor-theme
-  vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>f=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.config/gtk-3.0/settings.ini
-  vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>ci\"Breeze_Snow\<esc>"' -c 'wqa!' ~/.gtkrc-2.0
-  vim -c 'execute "silent! normal! jf=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.icons/default/index.theme
+  as_user vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>f=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.config/gtk-3.0/settings.ini
+  as_user vim -c 'execute "silent! normal! /gtk-cursor-theme-name\<cr>ci\"Breeze_Snow\<esc>"' -c 'wqa!' ~/.gtkrc-2.0
+  as_user vim -c 'execute "silent! normal! jf=lCBreeze_Snow\<esc>"' -c 'wqa!' ~/.icons/default/index.theme
   ok "Installed desktop environment successfully"
 }
 
@@ -239,14 +245,14 @@ install_blackarch() {
 
   # Verify keyring
   ## Download key
-  for serv in pgp.mit.edu hkp://pool.sks-keyservers.net; do
+  for serv in hkp://pool.sks-keyservers.net pgp.mit.edu ; do
     gpg --keyserver $serv --recv-keys 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && break
   done
   [ $? -eq 0 ] || exit 1
 
 ## Verify signature
 gpg --keyserver-options no-auto-key-retrieve \
-  --with-fingerprint blackarch-keyring.pkg.tar.xz.sig > /dev/null 2>&1 || exit 1
+  --with-fingerprint blackarch-keyring.pkg.tar.xz.sig || exit 1
 
 # remove signature
 [ -f "blackarch-keyring.pkg.tar.xz.sig" ] && rm -f blackarch-keyring.pkg.tar.xz.sig
@@ -260,12 +266,17 @@ pacman-key --populate
 
 # Install mirrors
 curl https://blackarch.org/blackarch-mirrorlist -o /etc/pacman.d/blackarch-mirrorlist
+sed -i '/blackarch/{N;d}' /etc/pacman.conf
+cat >> /etc/pacman.conf <<EOF
+[blackarch]
+Include = /etc/pacman.d/blackarch-mirrorlist
+EOF
 pacman -Syy
 ok "Blackarch Mirrors Installed."
 popd
 info "Changing neofetch config..."
 as_user 'neofetch; clear' # Make sure neofetch.conf is generated
-[ -e /home/$username/.config/neofetch/config.conf ] && vim -c 'execute "silent! normal! /ascii_distro=\<cr>f"lci"blackarch\<esc>"' -c 'wqa!' /home/$username/.config/neofetch/config.conf
+as_user vim -c 'execute "silent! normal! /ascii_distro=\<cr>f"lci"blackarchjk"' -c 'wqa!' /home/$username/.config/neofetch/config.conf
 }
 
 [ $EUID = 0 ] || err "You are not root!" # Only run as root
@@ -286,7 +297,7 @@ if [ -z "$1" ]; then
   echo "LANG=en_US.UTF-8" > /etc/locale.conf
   read -p "Enter hostname: " hostname
   echo "$hostname" > /etc/hostname
-  echo "\n127.0.0.1\t\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\t$hostname.localdomain\t$hostname" >> /etc/hosts
+  echo -e "\n127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\t$hostname.localdomain\t$hostname" >> /etc/hosts
   info "Setting the root password..."
   passwd
 
@@ -309,9 +320,9 @@ else
   systemctl enable sshd
   install_blackarch
   # remove unneeded stuff
-  pacman -Qdtq | xargs pacman -Rns
+  pacman -Qdtq | xargs pacman -Rns --noconfirm
   # Remove NOPASSWD permissions from user
-  vim -c 'execute "silent! normal! /%wheel\<cr>n^i#\<esc"' -c 'wqa!'
+  vim -c 'execute "silent! normal! /%wheel\<cr>n^i#\<esc"' -c 'wqa!' /etc/sudoers
   # vim -c 'execute "silent! normal! /PermitRootLogin\<cr>^xewciwyes\<esc>"' -c 'wqa!' /etc/ssh/sshd_config # enable root login
   rm -f "$0" # delete the script
 fi

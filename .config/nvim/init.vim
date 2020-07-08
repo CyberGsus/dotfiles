@@ -2,9 +2,7 @@ set path+=**
 au!
 " Install vim-plug
 if empty (glob ('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   q!
 endif
 
@@ -17,6 +15,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'hzchirs/vim-material'
 Plug 'preservim/nerdtree'               " File Tree
 Plug 'prettier/vim-prettier'
+Plug 'kristijanhusak/vim-carbon-now-sh'
 " Essential!!
 " From christoomey <https://www.youtube.com/watch?v=wlR5gYd6um0&t=1545s>
 
@@ -26,17 +25,10 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'               " Change surrounding stuff (quotes, bquotes)
 Plug 'tpope/vim-commentary'             " Commenting lines
 Plug 'tpope/vim-fugitive'
-Plug 'vim-syntastic/syntastic'
-Plug 'vim-scripts/ReplaceWithRegister'
-" Plug 'christoomey/vim-titlecase'        " Change titlecase instantly
-Plug 'christoomey/vim-sort-motion'      " Sorting faster
-Plug 'christoomey/vim-system-copy'      " Copying to system buffer
-" Plug 'kana/vim-textobj-indent'          " Better indenting
-Plug 'neomake/neomake'
-
-
-Plug 'sophacles/vim-processing'
-Plug 'pangloss/vim-javascript'
+Plug 'neoclide/coc.nvim', { 'branch' : 'release'}
+Plug 'lyuts/vim-rtags'
+" Plug 'ycm-core/YouCompleteMe'
+" Plug 'vim-syntastic/syntastic'
 call plug#end()
 packloadall
 
@@ -221,6 +213,18 @@ nnoremap <leader>html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>cit
 
 " set makeprg=bundle\ exec\ rspec\ -f\ QuickfixFormatter
 
+" Syntastic config
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_checkers = ['pycodestyle', 'mypy']
+
 " Include brackets
 " inoremap " ""<left>
 " inoremap ' ''<left>
@@ -252,6 +256,43 @@ function! RemoveWhiteSpaces()
   normal! 'm
 endfunction
 
-
-
 au BufWritePre * call RemoveWhiteSpaces()
+
+nnoremap ]l :try<bar>lnext<bar>catch /^Vim\%((\a\+)\)\=:E\%(553\<bar>42\):/<bar>lfirst<bar>endtry<cr>
+nnoremap [l :try<bar>lprev<bar>catch /^Vim\%((\a\+)\)\=:E\%(553\<bar>42\):/<bar>lfirst<bar>endtry<cr>
+
+let @x='^"+y$'
+
+" Remove background
+hi Normal guibg='NONE'
+
+
+function! GoYCM()
+  nnoremap <buffer> <silent> <leader>gd :YcmCompleter GoTo<CR>
+  nnoremap <buffer> <silent> <leader>gr :YcmCompleter GoToReferences<CR>
+  nnoremap <buffer> <silent> <leader>rr :YcmCompleter RefactorRename<space>
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+fun! GoCoC()
+  inoremap <buffer> <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+
+  inoremap <buffer> <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <buffer> <silent><expr> <C-space> coc#refresh()
+
+  " GoTo code navigation
+  nmap <buffer> <leader>gd <Plug>(coc-definition)
+  nmap <buffer> <leader>gy <Plug>(coc-type-definition)
+  nmap <buffer> <leader>gi <Plug>(coc-implementation)
+  nmap <buffer> <leader>gr <Plug>(coc-references)
+endfunction
+
+
+" source $HOME/.config/nvim/plug-config/coc.vim

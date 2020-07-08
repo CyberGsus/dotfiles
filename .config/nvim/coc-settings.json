@@ -1,0 +1,11 @@
+{
+  "coc.prefernces.formatOnSaveFiletypes" : ["css", "markdown", "javascript", "python"],
+  // python config
+  "python.linting.enabled" : true,
+  "python.linting.pylintEnabled" : true,
+
+  "snippets.ultisnips.directories" : [
+    "UltiSnips",
+    "~/.config/nvim/utils/snips"
+  ]
+}

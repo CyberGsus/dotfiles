@@ -1,10 +1,9 @@
 augroup languages
   autocmd BufRead,BufNewFile .zsh* set ft=zsh
-  au BufRead,BufNewFile *.h set ft=c
 
 
   autocmd FileType {c,javascript,cpp} iabbrev if if ()jki
-  autocmd FileType c source ~/.config/nvim/languages/c.vim
+  autocmd FileType {c,cpp} source ~/.config/nvim/languages/c.vim
   autocmd FileType python source ~/.config/nvim/languages/python.vim
   autocmd BufWritePost *.tex execute "!pdflatex %"
 
@@ -18,7 +17,7 @@ augroup languages
   au BufRead,BufNewFile .tmux* set ft=tmux
 
   " Set all my custom shell filetypes
-  au BufNewFile,BufRead *.{bashrc,bash_profile,sh} 
+  au BufNewFile,BufRead *.{bashrc,bash_profile,sh}
         \ set ft=sh
 
   " Set dockerfile filetypes

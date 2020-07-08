@@ -5,14 +5,16 @@ imap <leader>du ____jkhi
 
 
 augroup python_autoformat
-  au FileWritePost <buffer> call s:format()
   function! Format()
-    silent! !black -l 80 %
+    " system('black', '-l', string(&tw), expand('%'))
+    silent!
+    silent! !black -l 79 %
     e!
   endfunction
 
+  au FileWritePost *.py call Format()
   nmap <leader><tab> :call Format()<cr>
 augroup END
 
 iabbrev iff if:jki<space>
-set ts=4 sts=4 sw=4
+set ts=4 sts=4 sw=4 tw=78

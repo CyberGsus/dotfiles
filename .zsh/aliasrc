@@ -64,8 +64,8 @@ alias lS='ls -1FSsh --color=auto'
 alias lart='ls -1Fcart --color=auto'
 alias lrt='ls -1Fcrt --color=auto'
 
-alias zshrc='${=EDITOR} ~/.zshrc' # Quick access to the ~/.zshrc file
-alias aliasrc='${=EDITOR} ~/.zsh/aliasrc'
+alias zshrc="${=EDITOR} ~/.zshenv; source ~/.zshenv" # Quick access to the ~/.zshrc file
+alias aliasrc="${=EDITOR} ~/.zsh/aliasrc; source ~/.zsh/aliasrc"
 
 alias grep='grep --color'
 alias sgrep='grep -R -n -H -C 5 --exclude-dir={.git,.svn,CVS} '
@@ -89,7 +89,7 @@ duf() {
   du -sh ${1:=.}/*
 }
 # alias duf='du -sh *'
-alias fd='find . -type d -name'
+# alias fd='find . -type d -name'
 alias ff='find . -type f -name'
 
 alias h='history'
@@ -105,6 +105,14 @@ alias mv='mv -i'
 alias ip='ip -c'
 
 alias vim='TERM=xterm-256color vim'
+
+alias totalpop='while popd >/dev/null 2>&1; do echo -n ""; done'
+
+mkcd() {
+  # mkdir + pushes directories
+  local wd=$PWD
+  mkdir $@ && while [ $# -gt 0 ]; do pushd $wd/$1 >/dev/null; shift; done
+}
 
 
 # vim: ft=zsh expandtab

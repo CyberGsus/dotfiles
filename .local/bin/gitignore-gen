@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Gitignore generator based on curl
+
+
+DEFAULTS=('vim') # the defaults to use
+AUTO=()
+
+
+add_arg() {
+  local exists=0
+  for i in ${DEFAULTS[@]}; do 
+    [ "$1" = "$i" ] && exists=1 && break
+  done
+  [ $exists -eq 0 ] && DEFAULTS+=("$1")
+}
+
+auto_add() {
+  [ -d "$1" ] && add_arg $2 && AUTO+=("$2 ($1)|")
+}
+
+
+while [ $# -gt 0 ]; do
+  # Detect if it is present
+  add_arg $1
+  shift
+done
+
+auto_add node_modules node
+auto_add '.vim' 'vim'
+
+echo -e "Auto added: \x1b[38;5;115m$(echo ${AUTO[@]} | sed 's/\|\s/ /g')\x1b[m"
+
+
+
+echo -e "Selected: \x1b[38;5;213m$(echo ${DEFAULTS[@]} | sed 's/\s/, /g')\x1b[m"
+
+arg=$(echo ${DEFAULTS[@]} | tr ' ' ',')
+
+url="https://www.toptal.com/developers/gitignore/api/$arg"
+
+echo -e "Requesting to \x1b[38;5;81m'$url'\x1b[m"
+
+curl "$url" -o .gitignore.autogen && \
+  echo -e "\x1b[1;38;5;118mGenerated to .gitignore.autogen\x1b[m" || \
+  echo -e "\x1b[1;31mCould not save your file\x1b[m"

@@ -41,9 +41,9 @@ compr() {
     zip)      zip -r   $2.zip         $2    ;;
     7z)       7z a $2.7z              $2    ;;
     *)
-        echo "$usage"
-        return 1
-        ;;
+      echo "$usage"
+      return 1
+      ;;
   esac
 }
 
@@ -64,7 +64,7 @@ alias lS='ls -1FSsh --color=auto'
 alias lart='ls -1Fcart --color=auto'
 alias lrt='ls -1Fcrt --color=auto'
 
-alias zshrc="${=EDITOR} ~/.zshenv; source ~/.zshenv" # Quick access to the ~/.zshrc file
+alias zshenv="${=EDITOR} ~/.zshenv; source ~/.zshenv" # Quick access to the ~/.zshrc file
 alias aliasrc="${=EDITOR} ~/.zsh/aliasrc; source ~/.zsh/aliasrc"
 
 alias grep='grep --color'

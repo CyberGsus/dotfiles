@@ -1,46 +1,112 @@
 #!/bin/sh
 
-# Gitignore generator based on curl
+set -e
+
+DEFAULTS=('vim')
+FILENAME='.gitignore.gen'
+
+ARGS=()
+ALIASES=()
+
+add_alias() {
+  ALIASES+=("$1:$2")
+}
+
+ADD_ARG_ECHO=0
+ADD_ARG_REASON=
 
 
-DEFAULTS=('vim') # the defaults to use
-AUTO=()
-
+confirm() {
+  local msg=$1
+  shift
+  echo -ne "$msg [Y/n]\e[s: "
+  read -n1 val
+  echo -ne "\e[u\e[100000D\e[K"
+  [ -z "$val" ] || [ "$val" = 'y' ] || [ "$val" = 'Y' ] && return 
+  exit 1
+}
 
 add_arg() {
-  local exists=0
-  for i in ${DEFAULTS[@]}; do 
-    [ "$1" = "$i" ] && exists=1 && break
+  exists=0
+  while [ $# -gt 0 ]; do
+    exists=0
+    name=$1
+    for i in ${ARGS[@]}; do
+      [ "$i" = "$1" ] && exists=1 && break
+    done
+    for v in ${ALIASES[@]}; do
+      key=${v%%:*}
+      val=${v##*:}
+      [ "$key" == "$1" ] && name="$val" && break
+    done
+    [ $exists -eq 0 ] && ARGS+=("$name") && [ $ADD_ARG_ECHO -eq 1 ] && \
+      echo -ne "\e[38;5;153m*\e[m Added \e[38;5;219m$1\e[m" && \
+      [ -n "$ADD_ARG_REASON" ] && echo -e "\t\e[38;5;220m[ $ADD_ARG_REASON ]\e[m" || echo
+
+
+    shift
   done
-  [ $exists -eq 0 ] && DEFAULTS+=("$1")
+  unset exists
 }
+
 
 auto_add() {
-  [ -d "$1" ] && add_arg $2 && AUTO+=("$2 ($1)|")
+  ADD_ARG_ECHO=1
+  local arg=$1
+  shift
+  while [ $# -gt 0 ]; do 
+    [ -e "$1" ] && ADD_ARG_REASON="'$1' exists" &&  add_arg "$arg"  && break
+    shift
+  done
+  ADD_ARG_ECHO=0
 }
 
+rule() {
+  ADD_ARG_ECHO=1
+  local arg=$1
+  shift
+  local added=0
+  while [ $# -gt 0 ]; do
+    for i in ${ARGS[@]}; do
+      [ "$i" = "$1" ] && ADD_ARG_REASON="rule '$arg'" && add_arg "$i" && break && added=1
+    done
+    [ $added -eq 1 ] && break
+    shift
+  done
+}
 
+[ ! -d '.git' ] && confirm "No git repository! Write anyway?"
+
+add_alias vue vuejs
+
+ADD_ARG_ECHO=1
+ADD_ARG_REASON="default"
+for i in ${DEFAULTS[@]}; do
+  add_arg "$i"
+done
+
+
+
+ADD_ARG_REASON='from argument'
 while [ $# -gt 0 ]; do
-  # Detect if it is present
-  add_arg $1
+  case "$1" in
+    "-o") shift
+      FILENAME=$1
+      ;;
+    *) add_arg "$1" ;;
+  esac
+
   shift
 done
 
-auto_add node_modules node
-auto_add '.vim' 'vim'
+auto_add vue 'node_modules/@vue'
+rule vue node
 
-echo -e "Auto added: \x1b[38;5;115m$(echo ${AUTO[@]} | sed 's/\|\s/ /g')\x1b[m"
+auto_add node node_modules
 
+echo
+echo -e "Output to file \e[38;5;216m'$FILENAME'\e[m"
 
-
-echo -e "Selected: \x1b[38;5;213m$(echo ${DEFAULTS[@]} | sed 's/\s/, /g')\x1b[m"
-
-arg=$(echo ${DEFAULTS[@]} | tr ' ' ',')
-
-url="https://www.toptal.com/developers/gitignore/api/$arg"
-
-echo -e "Requesting to \x1b[38;5;81m'$url'\x1b[m"
-
-curl "$url" -o .gitignore.autogen && \
-  echo -e "\x1b[1;38;5;118mGenerated to .gitignore.autogen\x1b[m" || \
-  echo -e "\x1b[1;31mCould not save your file\x1b[m"
+URL="https://www.toptal.com/developers/gitignore/api/$(echo ${ARGS[@]} | tr ' ' ',')"
+echo -e "Requesting to \e[38;5;111m$URL\e[m ...\n"
+curl "$URL" | uniq > $FILENAME

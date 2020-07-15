@@ -29,9 +29,7 @@ compr() {
   local usage="Usage: compress <TYPE> <FILE>
   In which TYPE is of:
   tgz => *.tar.gz
-  tbz => *.tar.bz2
-  zip => *.zip
-  7z  => *.7z
+  tbz => *.tar.bz2 zip => *.zip 7z  => *.7z
   "
   [ -z "$1" ] || [ -z "$2" ] && (echo "$usage"; exit 1)
   [ -f "$2" ] || (echo "'$2' cannot be interpreted as a file"; exit 1)
@@ -114,5 +112,11 @@ mkcd() {
   mkdir $@ && while [ $# -gt 0 ]; do pushd $wd/$1 >/dev/null; shift; done
 }
 
+# named directories
+
+hash -d -- htb=~/hacking/htb
+hash -d -- hackthebox=~/hacking/htb
+hash -d -- thm=~/hacking/THM
+hash -d -- tryhackme=~/hacking/THM
 
 # vim: ft=zsh expandtab

@@ -91,7 +91,13 @@ ADD_ARG_REASON='from argument'
 while [ $# -gt 0 ]; do
   case "$1" in
     "-o") shift
-      FILENAME=$1
+      case "$1" in
+        stdout) FILENAME='&1' ;;
+        stdin) FILENAME='&0';; 
+        stderr) FILENAME='&2' ;;
+        '&'[0-9]) FILENAME="&$1" ;;
+        *) FILENAME=$1 ;;
+      esac
       ;;
     *) add_arg "$1" ;;
   esac

@@ -1,0 +1,4 @@
+#!/usr/bin/zsh
+
+hash -d -- "github"=/opt/contrib
+hash -d -- "hacking"=/opt/hacktools

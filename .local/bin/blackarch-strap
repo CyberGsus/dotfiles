@@ -1,0 +1,40 @@
+# Make tmp directory
+tmp="$(mktemp -d /tmp/blackarch_xtrap.XXXXXXXX)"
+trap 'rm -rf $tmp' EXIT
+cd $tmp || exit 1
+
+# Check internet
+curl -s --connect-timeout 8 https://archlinux.org > /dev/null 2>&1 || exit 1
+
+# Fetch keyring
+curl -fO 'https://www.blackarch.org/keyring/blackarch-keyring.pkg.tar.xz{,.sig}'
+
+# Verify keyring
+## Download key
+for serv in pgp.mit.edu hkp://pool.sks-keyservers.net; do
+  gpg --keyserver $serv --recv-keys 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && break
+done
+[ $? -eq 0 ] || exit 1
+
+## Verify signature
+gpg --keyserver-options no-auto-key-retrieve \
+  --with-fingerprint blackarch-keyring.pkg.tar.xz.sig > /dev/null 2>&1 || exit 1
+
+# remove signature
+[ -f "blackarch-keyring.pkg.tar.xz.sig" ] && rm -f blackarch-keyring.pkg.tar.xz.sig
+
+pacman-key --init
+
+# Install keyring
+pacman --config /dev/null --noconfirm -U blackarch-keyring.pkg.tar.xz || exit 1
+pacman-key --populate
+
+
+# Install mirrors
+curl https://blackarch.org/blackarch-mirrorlist -o /etc/pacman.d/blackarch-mirrorlist
+sed -i '/blackarch/{N;d}' /etc/pacman.conf
+cat >> '/etc/pacman.conf' << EOF
+[blackarch]
+Include = /etc/pacman.d/blackarch-mirrorlist
+EOF
+pacman -Syy

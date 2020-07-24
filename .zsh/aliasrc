@@ -13,10 +13,7 @@ ex ()
       *.rar)       unrar x $1     ;;
       *.gz)        gunzip $1    ;;
       *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
+      *.tbz2)      tar xjf $1   ;; *.tgz)       tar xzf $1   ;; *.zip)       unzip $1     ;; *.Z)         uncompress $1;;
       *.7z)        7z x $1      ;;
       *)           echo "'$1' cannot be extracted via ex()" ;;
     esac
@@ -34,18 +31,24 @@ compr() {
   [ -z "$1" ] || [ -z "$2" ] && (echo "$usage"; exit 1)
   [ -f "$2" ] || (echo "'$2' cannot be interpreted as a file"; exit 1)
   case $1 in
-    tbz)      tar cvjf  $2.tar.bz2    $2    ;;
-    tgz)      tar cvzf  $2.tar.gz     $2    ;;
-    zip)      zip -r   $2.zip         $2    ;;
-    7z)       7z a $2.7z              $2    ;;
-    *)
+    tbz)      tar cvjf  $2.tar.bz2    $2    ;; tgz)      tar cvzf  $2.tar.gz     $2    ;; zip)      zip -r   $2.zip         $2    ;; 7z)       7z a $2.7z              $2    ;; *)
       echo "$usage"
       return 1
       ;;
   esac
 }
 
+append_path() {
+  PATH=$(echo $PATH | tr ':' '\n' | cat <<<"$1" | tr '\n' ':' | sed 's/:$//g')
+}
+
+remove_path() {
+  PATH=$(echo $PATH | tr ':' '\n' | egrep -vi "$1" | tr '\n' ':' | sed 's/:$//g')
+}
+
 export EDITOR=nvim
+export append_path
+export remove_path
 
 alias pacman-update='sudo pacman-mirrors --geoip'
 
@@ -118,5 +121,12 @@ hash -d -- htb=~/hacking/htb
 hash -d -- hackthebox=~/hacking/htb
 hash -d -- thm=~/hacking/THM
 hash -d -- tryhackme=~/hacking/THM
+
+for i in `find ~/.zsh/aliases -type f`; do
+  source $i 2>/dev/null
+done
+
+
+append_path "$HOME/.cargo/bin"
 
 # vim: ft=zsh expandtab

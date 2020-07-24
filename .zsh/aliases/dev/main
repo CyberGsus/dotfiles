@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+hash -d -- dev=~/Documents/Programming
+hash -d -- dot=~/dotfiles
+hash -d -- node=~/Documents/Programming/Node

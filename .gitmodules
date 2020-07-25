@@ -4,15 +4,18 @@
 [submodule ".tmux"]
 	path = .tmux
 	url = https://github.com/gpakosz/.tmux
-[submodule ".config/nvim/plugged"]
-	path = .config/nvim/plugged
-	url = https://github.com/junegunn/vim-plug
 [submodule ".local/share/icons/candy-icons"]
 	path = .local/share/icons/candy-icons
 	url = https://github.com/EliverLara/candy-icons
-[submodule ".config/qtile-config"]
-	path = .config/qtile-config
-	url = https://github.com/CyberGsus/qtile-config
 [submodule ".config/awesome"]
 	path = .config/awesome
 	url = git@github.com:CyberGsus/awesome-config.git
+[submodule ".config/nvim/plugged"]
+	path = .config/nvim/plugged
+	url = https://github.com/junegunn/vim-plug
+[submodule ".config/qtile-config"]
+	path = .config/qtile-config
+	url = git@github.com:CyberGsus/qtile-config.git
+[submodule ".themes/Sweet-Dark"]
+	path = .themes/Sweet-Dark
+	url = https://github.com/NotZachery/Sweet-Better-Dark

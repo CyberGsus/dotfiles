@@ -4,4 +4,6 @@ blueman-applet &
 nm-applet &
 emojione-picker &
 xbindkeys -p
+redshift-gtk &
+stretchly &
 PATH+=':/home/cyber/.local/bin'

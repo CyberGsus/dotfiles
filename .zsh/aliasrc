@@ -128,5 +128,21 @@ done
 
 
 append_path "$HOME/.cargo/bin"
+append_path './node_modules/.bin'
+append_path $(yarn global bin)
+
+
+autoload -U add-zsh-hook
+local last_bin=$(yarn bin)
+yarn-binaries() {
+  local next_bin=$(yarn bin)
+  next_bin=".${next_bin##$PWD}"
+  [ -d "$last_bin" ] && remove_path "$last_bin"
+  [ -d "$next_bin" ] && append_path "$next_bin"
+  last_bin="$next_bin"
+}
+
+add-zsh-hook chpwd yarn-binaries
+yarn-binaries
 
 # vim: ft=zsh expandtab

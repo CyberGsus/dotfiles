@@ -1,3 +1,0 @@
-if expand('%:e') == 'c'
-  inoremap <leader>main jk:r $HOME/.snippets/main.c<cr>O<tab>
-endif

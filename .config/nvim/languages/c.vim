@@ -3,7 +3,7 @@
 function! FixStyle()
   let line = getline('.')
   if line !~ '^\s*#'
-    execute "silent! s/\\\>([^)]/ \\0/g" | " main (void) => main (void)
+    execute "silent! <buffer> s/\\\>([^)]/ \\0/g" | " main (void) => main (void)
   endif
   "  execute "silent! %s/\\\>[=+-<>/!]\\+/ \\0/g" | " a+b => a +b
 endfunction
@@ -11,7 +11,7 @@ endfunction
 
 function! CWrite()
   normal mm
-  %call FixStyle()
+  <buffer> call FixStyle()
   normal 'm
 endfunction
 

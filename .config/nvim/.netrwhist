@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/cyber/Documents/Programming/Node/home-app/server'
+let g:netrw_dirhist_3='/home/cyber/.config/nvim/vim-plug'
+let g:netrw_dirhist_2='/home/cyber/.vim-alter/plugged/vim-airline/.github'
+let g:netrw_dirhist_1='/home/cyber/.vim-alter/plugged/vim-airline/plugin'
+let g:netrw_dirhist_0='/home/cyber/.vim-alter/plugged/vim-airline/.github'
+let g:netrw_dirhist_9='/home/cyber/.vim-alter/plugged/vim-airline'
+let g:netrw_dirhist_8='/home/cyber/todo-app-express/client/src'
+let g:netrw_dirhist_7='/home/cyber/Documents/Programming/Node/todo-app'
+let g:netrw_dirhist_6='/home/cyber/Documents/Programming/Node/todo-app/server/src'
+let g:netrw_dirhist_5='/home/cyber/.config/nvim'

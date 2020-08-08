@@ -3,16 +3,119 @@
     "css",
     "markdown",
     "javascript",
+    "yaml",
+    "json",
     "python"
   ],
-  // python config
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
+  "typescript.preferences.quoteStyle": "single",
+  "javascript.preferences.quoteStyle": "single",
 
-  "snippets.ultisnips.directories": ["UltiSnips", "~/.config/nvim/utils/snips"],
+  "eslint.filetypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+  "eslint.run": "onSave",
+  "eslint.options": {
+    "semi": "off",
+    "arrow-parens": "off"
+  },
 
+  "emmet.excludeLanguages": ["markdown"],
   "emmet.includeLanguages": {
     "vue-html": "html",
     "vue": "html"
-  }
+  },
+
+  // python config
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["-l", "80"],
+
+  // snippets
+  "snippets.ultisnips.directories": ["UltiSnips"],
+  "snippets.extends": {
+    "cpp": ["c"],
+    "javascriptreact": ["javascript"],
+    "typescript": ["javascript"],
+    "vue": ["javascript", "html"]
+  },
+
+  // explorer
+  "explorer.width": 30,
+  "explorer.icon.enableNerdfont": true,
+  "explorer.previewAction.onHover": false,
+  "explorer.keyMappings": {
+    "<cr>": ["expandable?", "expand", "open"],
+    "v": "open:vsplit"
+  },
+
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp", "objc", "objcpp"],
+      "rootPatterns": [
+        ".ccls",
+        "compile_commands.json",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "initializationOptions": {
+        "cache": {
+          "directory": "/tmp/ccls"
+        }
+      }
+    },
+    "golang": {
+      "command": "go-langserver -gocodecompletion",
+      "filetypes": ["go"],
+      "rootPatterns": [".go", ".git/"]
+    }
+  },
+
+  "coc.source.emoji.filetypes": [
+    "markdown",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "python",
+    "go",
+    "yaml",
+    "json",
+    "c",
+    "cpp",
+    "no ft",
+    "css",
+    "gitcommit",
+    "lua",
+    "vim",
+    "java",
+    "processing",
+    "vue",
+    "html",
+    "css",
+    "json",
+    "txt",
+    "zsh",
+    "bash",
+    "sh"
+  ],
+
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "avoid",
+  "prettier.disableLanguages": [],
+  "prettier.bracketSpacing": true,
+  "prettier.tslintIntegration": true,
+  "prettier.eslintIntegration": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.trailingComma": "none",
+  "prettier.jsxBracketSameLine": true,
+
+  // git
+  "git.enableGutters": true
 }

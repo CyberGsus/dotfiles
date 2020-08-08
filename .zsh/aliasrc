@@ -108,10 +108,21 @@ alias ip='ip -c'
 
 alias totalpop='while popd >/dev/null 2>&1; do echo -n ""; done'
 
+resolve_named_directory() {
+  hash -d | grep "^$1" | cut -d'=' -f1
+}
+
 mkcd() {
   # mkdir + pushes directories
-  local wd=$PWD
-  mkdir $@ && while [ $# -gt 0 ]; do pushd $wd/$1 >/dev/null; shift; done
+  mkdir $@ && while [ $# -gt 0 ]; do 
+  # $HOME shortcut
+  [[ "$1" =~ '^/' ]] && fullpath="$HOME/${1##*~/}"
+  # named directories
+  [[ "$1" =~ '^[^/]' ]] && fullpath="$(resolve_named_directory "${${1##*~}%%/*}")/${1#*/}"
+  # full path
+  [[ "$1" =~ '^/' ]] && fullpath="$1" || fullpath="$PWD/$1"
+  pushd "$fullpath" >/dev/null; shift 
+done
 }
 
 # named directories

@@ -1,2 +1,4 @@
 **/__pycache__
 *.bak
+.config/nvim/autoload/plugged
+.config/vim/autoload/plugged
